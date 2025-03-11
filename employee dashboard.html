@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        .main-content {
+            margin-left: 200px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        
+        
+        
+        
+        .main-content {
+            margin-left: 220px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dashboard-section {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard-section h3 {
+            color: #333;
+        }
+        .action-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            width: 250px;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #FF8C00;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li class="active" onclick="location.href='employee dashboard.html'">Dashboard</li>
+            <li onclick="location.href='appointments.html'">Appointments</li>
+            <li onclick="location.href='patient management.html'">Patient Management</li>
+            <li onclick="location.href='employee medical reports.html'">Medical Reports</li>
+            <li onclick="location.href='internal messaging.html'">Internal Messaging</li>
+            <li onclick="location.href='employee billing and insurance.html'">Billing & Insurance</li>
+            <li onclick="location.href='employee settings.html'">Settings</li>
+            <li onclick="location.href='employee pharmacy and integration.html'">Prescriptions & Pharmacy</li>
+            <li onclick="location.href='emergency alerts.html'">Emergency Alerts</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Employee Dashboard</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <h3>Total Appointments Today: <span id="appointments">0</span></h3>
+            <h3>Pending Lab Results: <span id="labResults">0</span></h3>
+            <h3>Critical Patient Alerts: <span id="patientAlerts">0</span></h3>
+            <h3>Staff Availability: <span id="staffAvailability">Loading...</span></h3>
+        </div>
+        <button class="action-btn" onclick="location.href='organ availability.html'">Organ Availability</button>
+    </div>
+    <script>
+        function updateDashboard() {
+            document.getElementById('appointments').textContent = Math.floor(Math.random() * 50);
+            document.getElementById('labResults').textContent = Math.floor(Math.random() * 20);
+            document.getElementById('patientAlerts').textContent = Math.floor(Math.random() * 10);
+            document.getElementById('staffAvailability').textContent = "Doctors: " + Math.floor(Math.random() * 10) + ", Nurses: " + Math.floor(Math.random() * 20);
+        }
+        setInterval(updateDashboard, 5000);
+        updateDashboard();
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

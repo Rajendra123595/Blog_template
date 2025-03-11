@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing, Insurance & Finance</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            margin: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+        .container {
+            
+            width: 80%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-left: 220px;
+        }
+        .info-box {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .box {
+            padding: 20px;
+            
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 700px;
+            height: 500px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+        .header {
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        .main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+.total { background: #3498db; }
+        .employees { background: #2ecc71; }
+        .finance { background: #f39c12; }
+        .emergency { background: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li class="active" onclick="location.href='finance.html'" >Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Billing Insurance & Finance</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+    
+        <h2>Billing, Insurance & Finance</h2>
+        <label for="hospital-select">Select Hospital:</label>
+        <select id="hospital-select" onchange="updateFinanceData()">
+            <option value="">Select a Hospital</option>
+        </select>
+        <div class="info-box" id="finance-info">
+            <div class="box total " id="total-bills">Total Bills: ₹0</div>
+            <div class="box employees" id="pending-bills">Pending Bills: ₹0</div>
+            <div class="box finance" id="loan-amount">Loan Amount: ₹0</div>
+            <div class="box emergency" id="insurance-claims">Insurance Claims: 0% Approved</div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hospital Name</th>
+                    <th>Location</th>
+                    <th>Total Bills</th>
+                    <th>Pending Bills</th>
+                    <th>Loan Amount</th>
+                    <th>Insurance Claims</th>
+                </tr>
+            </thead>
+            <tbody id="finance-table">
+            </tbody>
+        </table>
+        <canvas id="monthlyChart"></canvas>
+        <button onclick="downloadPDF()">Download PDF</button>
+    </div>
+
+    <script>
+        const financeData = {
+            "Apollo Hospital": { location: "New York", total: 500000, pending: 100000, loan: 200000, claims: 80 },
+            "City Hospital": { location: "Los Angeles", total: 300000, pending: 50000, loan: 150000, claims: 75 },
+            "Metro Healthcare": { location: "Chicago", total: 400000, pending: 70000, loan: 180000, claims: 85 }
+        };
+
+        function populateDropdown() {
+            const hospitalSelect = document.getElementById("hospital-select");
+            Object.keys(financeData).forEach(hospital => {
+                let option = document.createElement("option");
+                option.value = hospital;
+                option.textContent = hospital;
+                hospitalSelect.appendChild(option);
+            });
+        }
+
+        function updateFinanceData() {
+            const selectedHospital = document.getElementById("hospital-select").value;
+            if (!selectedHospital) return;
+            const data = financeData[selectedHospital];
+            document.getElementById("total-bills").textContent = `Total Bills: $${data.total}`;
+            document.getElementById("pending-bills").textContent = `Pending Bills: $${data.pending}`;
+            document.getElementById("loan-amount").textContent = `Loan Amount: $${data.loan}`;
+            document.getElementById("insurance-claims").textContent = `Insurance Claims: ${data.claims}% Approved`;
+            document.getElementById("finance-table").innerHTML = `<tr><td>${selectedHospital}</td><td>${data.location}</td><td>$${data.total}</td><td>$${data.pending}</td><td>$${data.loan}</td><td>${data.claims}%</td></tr>`;
+            updateChart();
+        }
+        setInterval(updateFinanceData, 2000);
+
+        function updateChart() {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Total Bills per Month',
+                        data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 50000) + 10000),
+                        backgroundColor: Array.from({ length: 12 }, () => `hsl(${Math.random() * 360}, 100%, 50%)`)
+                    }]
+                }
+            });
+        }
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Billing, Insurance & Finance Report", 20, 10);
+            doc.save("Billing_Report.pdf");
+        }
+
+        document.addEventListener("DOMContentLoaded", populateDropdown);
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

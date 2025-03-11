@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organ Donor & Availability</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        .input-group {
+            margin: 10px 0;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            background: #008C45;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .hospital-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .hospital-item {
+            background: #f1f1f1;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .request-btn {
+            background: #FF8C00;
+            color: white;
+            padding: 5px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .request-btn:hover {
+            background: #e07b00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Logo" class="logo">
+            <p>Organ Availability</p>
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic">
+        </div>
+        <h2>Check Organ Availability</h2>
+        <div class="input-group">
+            <label for="organ">Select Organ:</label>
+            <select id="organ">
+                <option value="">--Select--</option>
+                <option value="heart">Heart</option>
+                <option value="liver">Liver</option>
+                <option value="kidney">Kidney</option>
+                <option value="lungs">Lungs</option>
+            </select>
+        </div>
+        <button class="btn" onclick="checkAvailability()">Check Availability</button>
+        <div class="hospital-list" id="hospital-list"></div>
+    </div>
+
+    <script>
+        let hospitals = [
+            { name: "Apollo Hospitals", location: "Chennai", organs: { heart: 2, liver: 1, kidney: 5, lungs: 3 } },
+            { name: "AIIMS", location: "Delhi", organs: { heart: 0, liver: 2, kidney: 3, lungs: 1 } },
+            { name: "Fortis Hospital", location: "Mumbai", organs: { heart: 1, liver: 1, kidney: 0, lungs: 4 } },
+            { name: "Manipal Hospital", location: "Bangalore", organs: { heart: 3, liver: 1, kidney: 6, lungs: 2 } },
+            { name: "Max Healthcare", location: "Hyderabad", organs: { heart: 5, liver: 2, kidney: 2, lungs: 0 } }
+        ];
+
+        function checkAvailability() {
+            const organ = document.getElementById("organ").value;
+            const hospitalList = document.getElementById("hospital-list");
+            hospitalList.innerHTML = "";
+
+            if (!organ) {
+                hospitalList.innerHTML = "<p style='color:red;'>Please select an organ.</p>";
+                return;
+            }
+
+            let availableHospitals = hospitals.filter(hospital => hospital.organs[organ] > 0);
+
+            if (availableHospitals.length === 0) {
+                hospitalList.innerHTML = "<p style='color:red;'>No hospitals have this organ available.</p>";
+                return;
+            }
+
+            availableHospitals.forEach((hospital, index) => {
+                const div = document.createElement("div");
+                div.classList.add("hospital-item");
+                div.innerHTML = `
+                    <p><strong>${hospital.name}</strong> - ${hospital.location} (Available: <span id="count-${index}">${hospital.organs[organ]}</span>)</p>
+                    <button class="request-btn" onclick="requestOrgan(${index}, '${organ}')">Request Organ</button>
+                `;
+                hospitalList.appendChild(div);
+            });
+        }
+
+        function requestOrgan(index, organ) {
+            if (hospitals[index].organs[organ] > 0) {
+                hospitals[index].organs[organ]--;
+                document.getElementById(`count-${index}`).innerText = hospitals[index].organs[organ];
+
+                if (hospitals[index].organs[organ] === 0) {
+                    checkAvailability();
+                }
+
+                alert("Organ request sent successfully!");
+            }
+        }
+    </script>
+</body>
+</html>

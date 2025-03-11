@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .modal {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 70%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: red;
+        }
+        h2 {
+            text-align: center;
+            color: #007BFF;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .download-btn, .delete-btn {
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .download-btn { background-color: #28A745; }
+        .delete-btn { background-color: #DC3545; }
+        .upload-section {
+            margin-top: 15px;
+            padding: 10px;
+            border: 2px dashed #007BFF;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .upload-btn {
+            background-color: #FF8C00;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 8px;
+        }
+    </style>
+    <script>
+        function closeWindow() {
+            window.history.back(); // Go back to the previous page
+        }
+
+        function addNewReport() {
+            const date = new Date().toISOString().split("T")[0];
+            const labName = prompt("Enter Lab Name:");
+            const reportName = prompt("Enter Report Name:");
+            const reportUrl = prompt("Enter Report URL (PDF/Image Link):");
+
+            if (labName && reportName && reportUrl) {
+                const table = document.getElementById("reportsTable");
+                const newRow = table.insertRow();
+
+                newRow.innerHTML = `
+                    <td>${date}</td>
+                    <td>${labName}</td>
+                    <td>${reportName}</td>
+                    <td>
+                        <button class="download-btn" onclick="openAndDownload('${reportUrl}')">Download ⬇</button>
+                        <button class="delete-btn" onclick="deleteReport(this)">🗑️</button>
+                    </td>
+                `;
+                alert("Report Added Successfully!");
+            } else {
+                alert("Please enter all details.");
+            }
+        }
+
+        function openAndDownload(reportUrl) {
+            window.open(reportUrl, '_blank'); // Open the report
+            setTimeout(() => {
+                const a = document.createElement("a");
+                a.href = reportUrl;
+                a.download = "Medical_Report.pdf"; // Default name for downloads
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }, 2000); // Delay download to allow preview
+        }
+
+        function deleteReport(button) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+            alert("Report Deleted Successfully!");
+        }
+    </script>
+</head>
+<body>
+
+    <div class="modal">
+        <span class="close-btn" onclick="closeWindow()">✖</span>
+        <h2>View Medical Reports</h2>
+
+        <table id="reportsTable">
+            <tr>
+                <th>Date</th>
+                <th>Lab Name</th>
+                <th>Report Name</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>2024-02-08</td>
+                <td>ABC Lab, Chiala</td>
+                <td>Blood Test</td>
+                <td>
+                    <button class="download-btn" onclick="openAndDownload('https://example.com/report1.pdf')">Download ⬇</button>
+                    <button class="delete-btn" onclick="deleteReport(this)">🗑️</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2024-01-20</td>
+                <td>City Lab</td>
+                <td>MRI Scan</td>
+                <td>
+                    <button class="download-btn" onclick="openAndDownload('https://example.com/report2.pdf')">Download ⬇</button>
+                    <button class="delete-btn" onclick="deleteReport(this)">🗑️</button>
+                </td>
+            </tr>
+            <tr>
+                <td>2023-12-15</td>
+                <td>XYZ Lab</td>
+                <td>X-Ray</td>
+                <td>
+                    <button class="download-btn" onclick="openAndDownload('https://example.com/report3.pdf')">Download ⬇</button>
+                    <button class="delete-btn" onclick="deleteReport(this)">🗑️</button>
+                </td>
+            </tr>
+        </table>
+
+        <div class="upload-section">
+            <button onclick="addNewReport()">➕ Add New Report</button>
+            <button class="upload-btn">Upload</button>
+            <p>(Image/PDF Only)</p>
+        </div>
+    </div>
+
+</body>
+</html>

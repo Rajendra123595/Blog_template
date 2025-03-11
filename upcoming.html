@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Appointments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 180px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        .main-content {
+            margin-left: 200px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .action-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            width: 250px;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #FF8C00;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+
+        
+
+        .container {
+            flex: 1;
+            padding: 30px;
+        }
+
+        
+        .appointment-details {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            margin: auto;
+        }
+
+
+        .reschedule { background-color: #FFA500; }
+        .cancel { background-color: #DC3545; }
+
+    </style>
+    <script>
+        function rescheduleAppointment() {
+            let newDate = prompt("Enter new date (YYYY-MM-DD):");
+            let newTime = prompt("Enter new time (HH:MM AM/PM):");
+            if (newDate && newTime) {
+                document.getElementById("appointmentDate").innerText = newDate;
+                document.getElementById("appointmentTime").innerText = newTime;
+                alert("Appointment Rescheduled!");
+            }
+        }
+
+        function cancelAppointment() {
+            if (confirm("Are you sure you want to cancel this appointment?")) {
+                document.getElementById("appointmentCard").style.display = "none";
+                alert("Appointment Cancelled.");
+            }
+        }
+
+        function logout() {
+            alert("Logging out...");
+            window.location.href = "login.html";
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+        
+        
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='patient health summary.html'">Patient Health Summary</li>
+            <li onclick="location.href='quick axns page.html'" >Quick Actions</li>
+            <li class="active" onclick="location.href='upcoming.html'">Upcoming Appointments & Reminders</li>
+            <li onclick="location.href='recent lab reports and prescriptions.html'">Recent Lab Reports & Prescriptions</li>
+            <li onclick="location.href='billing and payment status.html'">Billing & Payment Status</li>
+            <li onclick="location.href='customer support.html'">Chat & Customer Support</li>
+            <li onclick="location.href='emergency contact.html'">Emergency Contact</li>
+            <li onclick="location.href='hospital availability.html'">Hospital Availability</li>
+            <li onclick="location.href='feedback.html'">Feedback Page</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Upcoming Appointments & Remainders</h2>
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+            
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <div class="appointment-details" id="appointmentCard">
+            <p><strong>Doctor's Name:</strong> <span id="doctorName">Dr. Rahul Sharma</span></p>
+            <p><strong>Hospital Name:</strong> <span id="hospitalName">Apollo Hospital</span></p>
+            <p><strong>Date:</strong> <span id="appointmentDate">2024-02-20</span></p>
+            <p><strong>Time:</strong> <span id="appointmentTime">10:30 AM</span></p>
+
+            <button class="btn reschedule" onclick="location.href='reschedule page.html'">Reschedule</button>
+            <button class="btn cancel" onclick="cancelAppointment()">Cancel</button>
+        </div>
+    </div>
+
+</body>
+</html>

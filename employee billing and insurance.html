@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Insurance</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #ffffff50;
+        }
+        .sidebar ul li.active, .sidebar ul li:hover {
+            background: #007BFF;
+        }
+        .billing-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .invoice-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .invoice-list ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .paid { color: green; }
+        .pending { color: orange; }
+        .processing { color: blue; }
+        .invoice-details {
+            margin-top: 20px;
+            padding: 20px;
+            background: #eef;
+            border-radius: 5px;
+            position: relative;
+            display: none;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .action-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            width: 250px;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #FF8C00;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+            
+            <ul>
+               <li onclick="location.href='employee dashboard.html'">Dashboard</li>
+               <li onclick="location.href='appointments.html'">Appointments</li>
+               <li onclick="location.href='patient management.html'">Patient Management</li>
+               <li onclick="location.href='employee medical reports.html'">Medical Reports</li>
+               <li onclick="location.href='internal messaging.html'">Internal Messaging</li>
+               <li class="active" onclick="location.href='employee billing and insurance.html'">Billing & Insurance</li>
+               <li onclick="location.href='employee settings.html'">Settings</li>
+               <li onclick="location.href='employee pharmacy and integration.html'">Prescriptions & Pharmacy</li>
+               <li onclick="location.href='emergency alerts.html'">Emergency Alerts</li>
+            </ul>
+        </aside>
+       <div class="main-content">
+        <div class="header">
+            <h2>Billing & Insurance</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+
+        <main class="billing-content">
+            <h2>Billing and Insurance</h2>
+            <div class="invoice-list">
+                <h3>Invoices</h3>
+                <ul id="invoice-list">
+                    <li onclick="showInvoice('John Doe', 'MRI Scan', 41500, 'Paid')">John Doe - ₹41,500 <span class="paid">(Paid)</span></li>
+                    <li onclick="showInvoice('Jane Smith', 'X-Ray', 58200, 'Pending')">Jane Smith - ₹58,200 <span class="pending">(Pending)</span></li>
+                    <li onclick="showInvoice('Mark Lee', 'Blood Test', 24900, 'Processing')">Mark Lee - ₹24,900 <span class="processing">(Processing)</span></li>
+                     <li onclick="showInvoice('Emily Davis', 'Surgery', 37200, 'Paid')">Emily Davis - ₹37,200 <span class="paid">(Paid)</span></li>
+                    <li onclick="showInvoice('Michael Brown', 'X-Ray', 49500, 'Pending')">Michael Brown - ₹49,500 <span class="pending">(Pending)</span></li>
+                    <li onclick="showInvoice('Sarah Wilson', 'MRI Scan', 28750, 'Paid')">Sarah Wilson - ₹28,750 <span class="paid">(Paid)</span></li>
+                    <li onclick="showInvoice('David Johnson', 'Blood Test', 65600, 'Processing')">David Johnson - ₹65,600 <span class="processing">(Processing)</span></li>
+                    <li onclick="showInvoice('Emma White', 'Ultrasound', 45900, 'Pending')">Emma White - ₹45,900 <span class="pending">(Pending)</span></li>
+                    <li onclick="showInvoice('Chris Martin', 'ECG', 32100, 'Paid')">Chris Martin - ₹32,100 <span class="paid">(Paid)</span></li>
+                    <li onclick="showInvoice('Olivia Taylor', 'CT Scan', 58800, 'Pending')">Olivia Taylor - ₹58,800 <span class="pending">(Pending)</span></li>
+                    <li onclick="showInvoice('Kevin Harris', 'Consultation', 47300, 'Paid')">Kevin Harris - ₹47,300 <span class="paid">(Paid)</span></li>
+                    <li onclick="showInvoice('Lisa Thompson', 'Dental Checkup', 39450, 'Processing')">Lisa Thompson - ₹39,450 <span class="processing">(Processing)</span></li>
+                    <li onclick="showInvoice('Brian Anderson', 'Eye Test', 55200, 'Pending')">Brian Anderson - ₹55,200 <span class="pending">(Pending)</span></li>
+                    <li onclick="showInvoice('Rachel Moore', 'Physical Therapy', 61700, 'Paid')">Rachel Moore - ₹61,700 <span class="paid">(Paid)</span></li>
+                    <li onclick="showInvoice('Matthew Scott', 'Surgery', 44600, 'Processing')">Matthew Scott - ₹44,600 <span class="processing">(Processing)</span></li>
+                    
+                </ul>
+            </div>
+            
+            <div class="invoice-details" id="invoice-details">
+                <button class="close-btn" onclick="closeInvoice()">&times;</button>
+                <h3>Invoice Details</h3>
+                <p>Patient: <span id="patient-name"></span></p>
+                <p>Treatment: <span id="treatment"></span></p>
+                <p>Total Amount: ₹<span id="amount"></span></p>
+                <p>Status: <span id="status"></span></p>
+                <button onclick="downloadInvoice()">Download Invoice</button>
+                <button onclick="submitInsuranceClaim()">Submit Insurance Claim</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showInvoice(name, treatment, amount, status) {
+            document.getElementById("patient-name").textContent = name;
+            document.getElementById("treatment").textContent = treatment;
+            document.getElementById("amount").textContent = amount;
+            document.getElementById("status").textContent = status;
+            document.getElementById("invoice-details").style.display = "block";
+        }
+
+        function closeInvoice() {
+            document.getElementById("invoice-details").style.display = "none";
+        }
+
+        function downloadInvoice() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Invoice Details", 10, 10);
+            doc.text("Patient: " + document.getElementById("patient-name").textContent, 10, 20);
+            doc.text("Treatment: " + document.getElementById("treatment").textContent, 10, 30);
+            doc.text("Total Amount: ₹" + document.getElementById("amount").textContent, 10, 40);
+            doc.text("Status: " + document.getElementById("status").textContent, 10, 50);
+            doc.save("invoice.pdf");
+        }
+
+        function submitInsuranceClaim() {
+            alert("Insurance claim submitted successfully.");
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</body>
+</html>

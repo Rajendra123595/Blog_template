@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: auto;
+        }
+        h2, h3 {
+            color: #007BFF;
+        }
+        .info-box {
+            text-align: left;
+            background: #eef5ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background: #FF8C00;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #E67E22;
+        }
+        .cancel-button {
+            background: #6c757d;
+        }
+        .condition-box {
+            text-align: left;
+            padding: 10px;
+        }
+        label {
+            display: block;
+            margin: 5px 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .btn.logout {
+            background: #FF8C00;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn.logout:hover {
+            opacity: 0.9;
+        }
+        .back-btn {
+            background: #008C45;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #008C45;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+      <div class="header">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Hospital Logo" class="logo" id="hospital-logo">
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic" id="profile-pic">
+                <button class="btn logout" id="logout-btn" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <h2>🚑 Emergency Status</h2>
+        
+        <div class="info-box">
+            <p><strong>Patient Location:</strong> <span id="location-status">Detecting...</span></p>
+            <p><strong>Nearest Ambulance:</strong> <span id="ambulance-status">Finding...</span></p>
+            <p><strong>Recommended Hospital:</strong> <span id="hospital-status">Searching...</span></p>
+            <p><strong>ICU Availability:</strong> <span id="icu-status">Checking...</span></p>
+            <p><strong>Ventilators:</strong> <span id="ventilator-status">Checking...</span></p>
+        </div>
+
+        <div id="alert-box" style="display: none; color: red; font-weight: bold;"></div>
+
+        <h3>🚨 Patient Condition:</h3>
+        <div class="condition-box">
+            <label><input type="radio" name="condition" value="Heart Attack"> Heart Attack</label>
+            <label><input type="radio" name="condition" value="Trauma"> Trauma</label>
+            <label><input type="radio" name="condition" value="Breathing Issue"> Breathing Issue</label>
+            <label><input type="radio" name="condition" value="Other Issue"> Other Issue</label>
+        </div>
+
+        <button id="send-data" onclick="sendEmergencyData()">🚨 Send Live Patient Data</button>
+        <button class="cancel-button" onclick="goBack()">Cancel</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            getLocation();
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function getLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(processLocation, showError);
+            } else {
+                document.getElementById("location-status").innerText = "❌ Geolocation not supported.";
+            }
+        }
+
+        function processLocation(position) {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            document.getElementById("location-status").innerText = `📍 (${lat.toFixed(4)}, ${lon.toFixed(4)})`;
+            const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lon}&radius=5000&type=hospital&key=AIzaSyDMhsme67wrHNUxSSfdgccmvp3tIYEjmp8`;
+
+            // Simulated ambulance and hospital data (can be connected to real APIs)
+            let ambulanceETA = Math.floor(Math.random() * 5) + 2; 
+            document.getElementById("ambulance-status").innerText = `🚑 Arriving in ${ambulanceETA} mins`;
+
+            let hospitals = [
+                { name: "Apollo Hospital", distance: 2, beds: 5, icu: true, ventilators: 4 },
+                { name: "Fortis Hospital", distance: 3.5, beds: 0, icu: true, ventilators: 2 }, 
+                { name: "AIIMS", distance: 5, beds: 10, icu: true, ventilators: 6 }
+            ];
+
+            let recommendedHospital = hospitals.find(h => h.beds > 0) || hospitals[hospitals.length - 1];
+
+            if (recommendedHospital.beds === 0) {
+                document.getElementById("alert-box").innerText = `⚠️ Alert: ${recommendedHospital.name} is Full - Redirecting to AIIMS (5km)`;
+                document.getElementById("alert-box").style.display = "block";
+                recommendedHospital = hospitals.find(h => h.name === "AIIMS");
+            }
+
+            document.getElementById("hospital-status").innerText = `${recommendedHospital.name} (${recommendedHospital.distance} km, Beds: ${recommendedHospital.beds})`;
+            document.getElementById("icu-status").innerText = recommendedHospital.icu ? "✅ Available" : "❌ Not Available";
+            document.getElementById("ventilator-status").innerText = recommendedHospital.ventilators;
+        }
+
+        function showError(error) {
+            let statusText = document.getElementById("location-status");
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    statusText.innerText = "❌ Location access denied. Please allow location services.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    statusText.innerText = "⚠️ Location information unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    statusText.innerText = "⏳ Location request timed out.";
+                    break;
+                default:
+                    statusText.innerText = "❌ An unknown error occurred.";
+            }
+        }
+
+        function sendEmergencyData() {
+            let selectedCondition = document.querySelector('input[name="condition"]:checked');
+
+            if (!selectedCondition) {
+                alert("⚠️ Please select a patient condition!");
+                return;
+            }
+
+            let alertMessage = `🚨 Emergency Data Sent!\n
+            Patient Condition: ${selectedCondition.value}\n
+            Nearest Ambulance: ${document.getElementById("ambulance-status").innerText}\n
+            Recommended Hospital: ${document.getElementById("hospital-status").innerText}`;
+
+            alert(alertMessage);
+            window.history.back(); // Redirect to previous page
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+
+</body>
+</html>

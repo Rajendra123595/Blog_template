@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .btn.logout {
+            background: #FF8C00;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn.logout:hover {
+            opacity: 0.9;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        .input-group {
+            margin: 10px 0;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .btn.confirm {
+            background: #008C45;
+            color: white;
+        }
+        .btn.cancel {
+            background: #FF8C00;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .hidden {
+            display: none;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function confirmAppointment() {
+            document.getElementById("appointment-form").classList.add("hidden");
+            document.getElementById("confirmation-message").classList.remove("hidden");
+        }
+        function logout() {
+            alert("Logged Out Successfully!");
+            window.location.href = "login.html"; // Redirect to login page
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+        function updateDoctors() {
+            let hospital = document.getElementById("hospital").value;
+            let doctorSelect = document.getElementById("doctor");
+            doctorSelect.innerHTML = ""; // Clear existing options
+
+            let doctorsList = {
+                "Apollo Hospital": ["Dr. Rahul Sharma", "Dr. Ananya Singh", "Dr. Vikram Patel"],
+                "Fortis Hospital": ["Dr. Priya Mehta", "Dr. Arjun Nair", "Dr. Suresh Kumar"],
+                "AIIMS Hospital": ["Dr. Sanjay Gupta", "Dr. Meera Desai", "Dr. Kavita Joshi"]
+            };
+
+            if (hospital in doctorsList) {
+                doctorsList[hospital].forEach(doc => {
+                    let option = document.createElement("option");
+                    option.text = doc;
+                    doctorSelect.add(option);
+                });
+            }
+        }
+        
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Hospital Logo" class="logo" id="hospital-logo">
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic" id="profile-pic">
+                <button class="btn logout" id="logout-btn" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+
+        <div id="appointment-form">
+            <h2 id="appointment-title">Book an Appointment</h2>
+            
+            <div class="input-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Enter your name">
+            </div>
+
+            <div class="input-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" placeholder="Enter your age">
+            </div>
+
+            <div class="input-group">
+                <label for="symptoms">Symptoms:</label>
+                <input type="text" id="symptoms" placeholder="Enter symptoms">
+            </div>
+            <div class="input-group">
+                <label for="hospital">Select Hospital:</label>
+                <select id="hospital" onchange="updateDoctors()">
+                    <option>Select a hospital</option>
+                    <option>Apollo Hospital</option>
+                    <option>Fortis Hospital</option>
+                    <option>AIIMS Hospital</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="doctor">Doctor:</label>
+                <select id="doctor">
+                    <option>Select a doctor</option>
+                    <option>Dr. Rahul Sharma</option>
+                    <option>Dr. Priya Mehta</option>
+                    <option>Dr. Arjun Nair</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="datetime">Date & Time:</label>
+                <input type="datetime-local" id="datetime">
+            </div>
+
+            <button class="btn confirm" id="confirm-btn" onclick="confirmAppointment()">Confirm Appointment</button>
+            <button class="btn cancel" id="cancel-btn" onclick="location.href='quick axns page.html'">Cancel</button>
+            
+        </div>
+
+        <div id="confirmation-message" class="hidden">
+            <h2 id="success-message" style="color: green;">Appointment Booked Successfully!</h2>
+            <button class="btn confirm" id="payment-btn" onclick="location.href='make a payment page.html'">Make a Payment</button>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Billing & Payment Status</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F8F8F8;
+    color: #444444;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #FF8C00, #008C45);
+    padding: 20px;
+    position: fixed;
+    top: 50px; 
+    height: calc(100% - 50px);
+    color: white;
+    overflow-y: auto;
+    width: 190px;
+}
+
+.sidebar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 12px;
+    border-bottom: 1px solid #F8F8F8;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover, .sidebar ul li.active {
+    background: #007BFF;
+    color: white;
+}
+
+.main-content {
+    margin-left: 200px;
+    flex-grow: 1; /* Allow main content to take up available space */
+    padding: 30px;
+    margin-top: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #566D7E;
+    padding: 20px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 700px;
+    margin: auto;
+}
+
+.header .patient-id {
+    font-size: 14px;
+    color: #EE7EA0;
+    font-weight: bold;
+}
+
+.header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.header .logout-btn {
+    background: #FF8C00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.header .logout-btn:hover {
+    background: #E67E22; /* Darker orange on hover */
+}
+
+.billing-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    max-width: 900px;
+}
+
+.billing-container h4 {
+    color: #008C45;
+    margin-bottom: 15px;
+}
+
+.billing-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.billing-item:last-child {
+    border-bottom: none;
+}
+
+.pay-btn {
+    background: #007BFF; /* Blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background: #0056b3; /* Darker blue on hover */
+}
+
+.pay-btn {
+    width: 150px; /* Reduced width of pay button */
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Profile Picture">
+    <ul>
+        <li onclick="location.href='patient health summary.html'">Patient Health Summary</li>
+        <li onclick="location.href='quick axns page.html'">Quick Actions</li>
+        <li onclick="location.href='upcoming.html'">Upcoming Appointments & Reminders</li>
+        <li onclick="location.href='recent lab reports and prescriptions.html'">Recent Lab Reports & Prescriptions</li>
+        <li class="active" onclick="location.href='billing and payment status.html'">Billing & Payment Status</li>
+        <li onclick="location.href='customer support.html'">Chat & Customer Support</li>
+        <li onclick="location.href='emergency contact.html'">Emergency Contact</li>
+        <li onclick="location.href='hospital availability.html'">Hospital Availability</li>
+        <li onclick="location.href='feedback.html'">Feedback Page</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <div>
+            <h2>Billing & Payment Status</h2>
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+        </div>
+        <div>
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="User Avatar">
+        </div>
+        <button class="logout-btn" onclick="location.href='3personslogin.html'">Logout</button>
+    </div>
+    <div class="billing-container">
+        <h4>Pending Bills</h4>
+        <div id="billing-list"></div>
+        <h4>Past Pending Bills</h4>
+        <div id="past-billing-list"></div>
+        <h4>Medications</h4>
+        <div id="medications-list"></div>
+        <h4>Hospital Visits</h4>
+        <div id="visits-list"></div>
+        <h4>Total Charges</h4>
+        <div id="total-charges"></div>
+        <button class="pay-btn" onclick="redirectToPayment('total')">Pay Now</button>
+    </div>
+</div>
+
+<script>
+let bills = JSON.parse(localStorage.getItem("bills")) || [
+    { id: "12345", amount: "₹15,000.00", dueDate: "2025-03-15", status: "pending" },
+    { id: "11223", amount: "₹3,000.00", dueDate: "2025-01-15", status: "past" },
+    { id: "44556", amount: "₹2,000.00", dueDate: "2025-01-20", status: "past" }
+];
+
+let medications = [
+    { name: "Medication A", charges: "₹2,000.00" },
+    { name: "Medication B", charges: "₹1,500.00" }
+];
+
+let visits = [
+    { date: "2025-02-05", purpose: "Consultation", charges: "₹500.00" },
+    { date: "2025-02-10", purpose: "Lab Test", charges: "₹1,000.00" }
+];
+
+let otherCharges = { 
+    "Other Charges": "₹500.00" 
+};
+
+function renderBills() {
+    const billingList = document.getElementById("billing-list");
+    const pastBillingList = document.getElementById("past-billing-list");
+    billingList.innerHTML = "";
+    pastBillingList.innerHTML = "";
+
+    if (bills.length === 0) {
+        billingList.innerHTML = "<p>No pending bills.</p>";
+        pastBillingList.innerHTML = "<p>No past pending bills.</p>";
+        return;
+    }
+
+    bills.forEach((bill) => {
+        const billItem = document.createElement("div");
+        billItem.classList.add("billing-item");
+        billItem.innerHTML = `
+            <div>
+                <p><strong>Bill ID:</strong> ${bill.id}</p>
+                <p><strong>Amount:</strong> ${bill.amount}</p>
+                <p><strong>Due Date:</strong> ${bill.dueDate}</p>
+            </div>
+            <button class="pay-btn" onclick="redirectToPayment('${bill.id}')">Pay Now</button>
+        `;
+        if (bill.status === "pending") {
+            billingList.appendChild(billItem);
+        } else {
+            pastBillingList.appendChild(billItem);
+        }
+    });
+}
+
+function renderMedications() {
+    const medicationsList = document.getElementById("medications-list");
+    medicationsList.innerHTML = "";
+
+    medications.forEach((medication) => {
+        const medicationItem = document.createElement("div");
+        medicationItem.classList.add("billing-item");
+        medicationItem.innerHTML = `
+            <div>
+                                <p><strong>Medication:</strong> ${medication.name}</p>
+                <p><strong>Charges:</strong> ${medication.charges}</p>
+            </div>
+        `;
+        medicationsList.appendChild(medicationItem);
+    });
+}
+
+function renderVisits() {
+    const visitsList = document.getElementById("visits-list");
+    visitsList.innerHTML = "";
+
+    visits.forEach((visit) => {
+        const visitItem = document.createElement("div");
+        visitItem.classList.add("billing-item");
+        visitItem.innerHTML = `
+            <div>
+                <p><strong>Date:</strong> ${visit.date}</p>
+                <p><strong>Purpose:</strong> ${visit.purpose}</p>
+                <p><strong>Charges:</strong> ${visit.charges}</p>
+            </div>
+        `;
+        visitsList.appendChild(visitItem);
+    });
+}
+
+function renderTotalCharges() {
+    const totalChargesContainer = document.getElementById("total-charges");
+    totalChargesContainer.innerHTML = "";
+
+    let totalMedicationCharges = medications.reduce((acc, medication) => acc + parseFloat(medication.charges.replace('₹', '').replace(',', '')), 0);
+    let totalVisitCharges = visits.reduce((acc, visit) => acc + parseFloat(visit.charges.replace('₹', '').replace(',', '')), 0);
+    let totalOtherCharges = parseFloat(otherCharges["Other Charges"].replace('₹', '').replace(',', ''));
+    let grandTotal = totalMedicationCharges + totalVisitCharges + totalOtherCharges;
+
+    const totalChargesItem = document.createElement("div");
+    totalChargesItem.classList.add("billing-item");
+    totalChargesItem.innerHTML = `
+        <div>
+            <p><strong>Total Medication Charges:</strong> ₹${totalMedicationCharges.toLocaleString()}</p>
+            <p><strong>Total Visit Charges:</strong> ₹${totalVisitCharges.toLocaleString()}</p>
+            <p><strong>Other Charges:</strong> ${otherCharges["Other Charges"]}</p>
+            <p><strong>Grand Total:</strong> ₹${grandTotal.toLocaleString()}</p>
+        </div>
+    `;
+    totalChargesContainer.appendChild(totalChargesItem);
+}
+
+function redirectToPayment(billId) {
+    localStorage.setItem("selectedBill", billId);
+    window.location.href = "payment option.html";
+}
+
+let username = "patient123";
+let password = "securepass";
+let patientId = btoa(username + password).slice(0, 8);
+document.getElementById("patient-id").textContent = patientId;
+
+renderBills();
+renderMedications();
+renderVisits();
+renderTotalCharges();
+</script>
+
+</body>
+</html>

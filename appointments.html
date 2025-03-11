@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Actions - Swasth India</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 180px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        .main-content {
+            margin-left: 200px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .action-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            width: 250px;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #FF8C00;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            font-size: 18px;
+        }
+        .stat {
+            background: #FFF;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 45%;
+        }
+        .container1 {
+            max-width: 400px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .day {
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .confirmed { background: green; color: white; }
+        .pending { background: yellow; }
+        .canceled { background: red; color: white; }
+        .urgent { background: orange; color: white; }
+
+        .month-selector {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .month-selector select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .appointment-list {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .btn1 {
+            background: green;
+            color: #ffffff;
+            height: 40px;
+        }
+        .content {
+            
+            padding: 20px;
+            width: 100%;
+        }
+        input, select {
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='employee dashboard.html'">Dashboard</li>
+            <li class="active" onclick="location.href='appointments.html'">Appointments</li>
+            <li onclick="location.href='patient management.html'">Patient Management</li>
+            <li onclick="location.href='employee medical reports.html'">Medical Reports</li>
+            <li onclick="location.href='internal messaging.html'">Internal Messaging</li>
+            <li onclick="location.href='employee billing and insurance.html'">Billing & Insurance</li>
+            <li onclick="location.href='employee settings.html'">Settings</li>
+            <li onclick="location.href='employee pharmacy and integration.html'">Prescriptions & Pharmacy</li>
+            <li onclick="location.href='emergency alerts.html'">Emergency Alerts</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Appointments and Scheduling</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <div class="container">
+            <h2>Today's Appointments Summary</h2>
+            <div class="stats">
+                <div class="stat">Upcoming: <span id="upcoming">0</span></div>
+                <div class="stat">In Progress: <span id="inProgress">0</span></div>
+            </div>
+            <div class="stats">
+                <div class="stat">Completed: <span id="completed">0</span></div>
+                <div class="stat">Canceled: <span id="canceled">0</span></div>
+            </div>
+        </div>
+        <div class="container1">
+            <h3>Monthly Calendar View</h3>
+
+            <div class="month-selector">
+                <label for="month">Select Month:</label>
+                <select id="month" onchange="generateCalendar()">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+            </div>
+
+            <div class="calendar" id="calendar"></div>
+        </div>
+        <div class="content">
+        <h2>Schedule New Appointment</h2>
+        <form id="appointmentForm">
+            <input type="text" id="patientName" placeholder="Patient Name" required>
+            <input type="datetime-local" id="dateTime" required>
+            <select id="doctor">
+                <option value="Dr. Smith">Dr. Smith</option>
+                <option value="Dr. Johnson">Dr. Johnson</option>
+            </select>
+            <input type="text" id="reason" placeholder="Reason for Visit" required>
+            <button type="submit" class="btn1">Schedule Appointment</button>
+        </form>
+        <div class="appointment-list">
+            <h3>Appointment List</h3>
+            <ul id="appointmentList"></ul>
+        </div>
+        <div class="notifications">
+            <h3>Appointment Reminders & Notifications</h3>
+            <ul id="notificationsList"></ul>
+        </div>
+    </div>
+        
+    
+    </div>
+    <script>
+        function updateAppointments() {
+            const upcoming = Math.floor(Math.random() * 10);
+            const inProgress = Math.floor(Math.random() * 5);
+            const completed = Math.floor(Math.random() * 15);
+            const canceled = Math.floor(Math.random() * 3);
+            
+            document.getElementById("upcoming").textContent = upcoming;
+            document.getElementById("inProgress").textContent = inProgress;
+            document.getElementById("completed").textContent = completed;
+            document.getElementById("canceled").textContent = canceled;
+        }
+        
+        updateAppointments();
+        setInterval(updateAppointments, 6000); // Update every 2 minutes
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+        function generateCalendar() {
+            const calendar = document.getElementById("calendar");
+            calendar.innerHTML = ""; 
+            const month = document.getElementById("month").value;
+            const year = new Date().getFullYear();
+            
+            // Get the number of days in the selected month
+            const daysInMonth = new Date(year, parseInt(month) + 1, 0).getDate();
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                let statusClass = getRandomStatus();
+                let dayDiv = document.createElement("div");
+                dayDiv.classList.add("day", statusClass);
+                dayDiv.textContent = i;
+                dayDiv.onclick = () => alert("Appointment on " + (parseInt(month) + 1) + "/" + i + ": " + statusClass);
+                calendar.appendChild(dayDiv);
+            }
+        }
+
+        function getRandomStatus() {
+            const statuses = ["confirmed", "pending", "canceled", "urgent"];
+            return statuses[Math.floor(Math.random() * statuses.length)];
+        }
+
+        // Set the default month to the current month
+        document.getElementById("month").value = new Date().getMonth();
+        generateCalendar();
+        document.getElementById("appointmentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let patientName = document.getElementById("patientName").value;
+            let dateTime = document.getElementById("dateTime").value;
+            let doctor = document.getElementById("doctor").value;
+            let reason = document.getElementById("reason").value;
+            
+            let listItem = document.createElement("li");
+            listItem.innerHTML = `<strong>${patientName}</strong> - ${dateTime} - ${doctor} - ${reason} <button onclick="this.parentElement.remove()">Cancel</button>`;
+            document.getElementById("appointmentList").appendChild(listItem);
+            
+            let reminderItem = document.createElement("li");
+            reminderItem.innerHTML = `Reminder sent to ${patientName} for ${dateTime}`;
+            document.getElementById("notificationsList").appendChild(reminderItem);
+            
+            setTimeout(() => {
+                let upcomingItem = document.createElement("li");
+                upcomingItem.innerHTML = `Upcoming: ${patientName}'s appointment at ${dateTime}`;
+                document.getElementById("notificationsList").appendChild(upcomingItem);
+            }, 5000);
+            
+            document.getElementById("appointmentForm").reset();
+        });
+    </script>
+</body>
+</html>

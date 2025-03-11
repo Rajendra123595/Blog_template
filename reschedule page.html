@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reschedule Appointment</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F8F8F8;
+    color: #444444;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #FF8C00, #008C45);
+    padding: 20px;
+    position: fixed;
+    top: 50px; 
+    height: calc(100% - 50px);
+    color: white;
+    overflow-y: auto;
+    width: 190px;
+}
+
+.sidebar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 12px;
+    border-bottom: 1px solid #F8F8F8;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover, .sidebar ul li.active {
+    background: #007BFF;
+    color: white;
+}
+
+.main-content {
+    margin-left: 200px;
+    flex-grow: 1; /* Allow main content to take up available space */
+    padding: 30px;
+    margin-top: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    background: #566D7E;
+    padding: 20px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 500px;
+    margin: auto;
+}
+
+.form-container select, .form-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.confirm-btn {
+    background: #008C45;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.confirm-btn:hover {
+    background: #FF8C00;
+}
+
+.header .patient-id {
+    font-size: 14px;
+    color: #EE7EA0;
+    font-weight: bold;
+}
+
+.header .logout {
+    background: #FF8C00;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    position: relative; /* Remove fixed positioning */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#" class="logo">Hospital Management System</a>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Appointments</a>
+        <a href="#">Doctors</a>
+        <a href="#">Patients</a>
+        <a href="#">Contact</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Profile Picture">
+    <ul>
+        <li onclick="location.href='patient health summary.html'">Patient Health Summary</li>
+            <li onclick="location.href='quick axns page.html'">Quick Actions</li>
+            <li class="active" onclick="location.href='upcoming.html'">Upcoming Appointments & Reminders</li>
+            <li onclick="location.href='recent lab reports and prescriptions.html'">Recent Lab Reports & Prescriptions</li>
+            <li onclick="location.href='billing and payment status.html'">Billing & Payment Status</li>
+            <li onclick="location.href='customer support.html'">Chat & Customer Support</li>
+            <li onclick="location.href='emergency contact.html'">Emergency Contact</li>
+            <li onclick="location.href='hospital availability .html'">Hospital Availability</li>
+            <li onclick="location.href='feedback.html'">Feedback Page</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <div>
+            <h2>Reschedule Appointment</h2>
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+        </div>
+        <div>
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="User Avatar">
+            <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h3>Current Appointment Details</h3>
+        <p>Hospital: <span id="currentHospital">City General Hospital</span></p>
+        <p>Date: <span id="currentDate">2024-02-10 (Sunday)</span></p>
+        <p>Time: <span id="currentTime">10:30 AM</span></p>
+        <p>Doctor: <span id="currentDoctor">Dr. John Smith - Cardiologist</span></p>
+
+        <h3>Select New Date:</h3>
+        <input type="date" id="newDate" onchange="updateDoctorAvailability()">
+
+        <h3>Select New Time:</h3>
+        <input type="time" id="newTime" onchange="updateDoctorAvailability()">
+
+        <h3>Select Hospital:</h3>
+        <select id="newHospital" onchange="updateDoctorAvailability()">
+            <option value="city_general">City General Hospital</option>
+            <option value="apollo">Apollo Hospital</option>
+            <option value="kims">KIMS Hospital</option>
+        </select>
+
+        <h3>Select Doctor:</h3>
+        <select id="newDoctor">
+            </select>
+
+        <button class="confirm-btn" onclick="rescheduleAppointment()">Confirm Reschedule</button>
+        <button class="confirm-btn" onclick="cancelReschedule()">Cancel</button>
+
+    </div>
+</div>
+<script>
+
+let appointments = JSON.parse(localStorage.getItem('appointments')) || []; // Retrieve from localStorage
+
+function rescheduleAppointment() {
+    const newDate = document.getElementById('newDate').value;
+    const newTime = document.getElementById('newTime').value;
+    const newDoctor = document.getElementById('newDoctor').value;
+    const newHospital = document.getElementById('newHospital').value;
+
+    const appointmentIndex = findAppointmentIndex(); // Find the index of the appointment to reschedule
+
+    if (appointmentIndex !== -1) {
+        appointments[appointmentIndex] = { // Update the appointment details
+            ...appointments[appointmentIndex], // Copy existing properties
+            date: newDate,
+            time: newTime,
+            doctor: newDoctor,
+            hospital: newHospital
+        };
+        localStorage.setItem('appointments', JSON.stringify(appointments)); // Store updated data
+        alert("Appointment rescheduled successfully!");
+        // You can use window.opener to access the previous page and update its content if needed.
+        window.open('upcoming.html', '_blank');
+        if (window.opener) {
+            window.opener.updateAppointments(); // Call a function in the previous window to update
+        }
+    } else {
+        alert("Appointment not found!");
+    }
+
+}
+
+function findAppointmentIndex() {
+    // Implement logic to find the index of the appointment to be rescheduled
+    // For example, based on the current date, time, and doctor.
+    // Replace this with your actual logic.
+    return 0; // Placeholder: Replace with your logic to find the correct index
+}
+
+function cancelReschedule() {
+    alert("Reschedule cancelled.");
+}
+
+function getDayOfWeek(dateString) {
+    const date = new Date(dateString);
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    return days[date.getDay()];
+}
+
+
+function updateDoctorAvailability() {
+    const selectedDate = document.getElementById('newDate').value;
+    const selectedTime = document.getElementById('newTime').value;
+    const selectedHospital = document.getElementById('newHospital').value;
+
+    const availableDoctors = getAvailableDoctors(selectedDate, selectedTime, selectedHospital);
+
+    const doctorSelect = document.getElementById('newDoctor');
+    doctorSelect.innerHTML = ''; // Clear existing options
+
+    availableDoctors.forEach(doctor => {
+        const option = document.createElement('option');
+        option.value = doctor.id;
+        option.text = doctor.name + " - " + doctor.specialization;
+        doctorSelect.appendChild(option);
+    });
+}
+
+function getAvailableDoctors(date, time, hospital) {
+    // Replace this with your actual logic to fetch doctor availability based on date, time, and hospital
+    // This function should return an array of objects, where each object represents an available doctor
+    // Example: [{ id: 'dr_smith', name: 'Dr. John Smith', specialization: 'Cardiologist' }, ...]
+
+    const available = [];
+    if (hospital === 'city_general') {
+        available.push({ id: 'dr_smith', name: 'Dr. John Smith', specialization: 'Cardiologist' });
+    }
+    if (hospital === 'apollo') {
+        available.push({ id: 'dr_jones', name: 'Dr. Jane Jones', specialization: 'Neurologist' });
+    }
+    if (hospital === 'kims') {
+        available.push({ id: 'dr_lee', name: 'Dr. David Lee', specialization: 'Surgeon' });
+    }
+    return available;
+}
+
+function getDoctorName(doctorId) {
+    // This function is no longer needed since doctor names are now in the dropdown
+    return ""; // You can remove this function
+}
+
+// Set initial values (you would fetch these from a database or API)
+document.getElementById('newDate').value = "2024-02-15"; // Example new date
+document.getElementById('newTime').value = "11:00"; // Example new time
+
+// Call this initially to populate the doctor dropdown
+updateDoctorAvailability();
+
+// Sample appointment data (replace with your actual data)
+appointments = [
+    {
+        date: "2024-02-10",
+        time: "10:30",
+        doctor: "dr_smith",
+        hospital: "city_general"
+    }
+];
+
+localStorage.setItem('appointments', JSON.stringify(appointments)); // Store in localStorage
+
+// Set current appointment details
+document.getElementById('currentDate').textContent = appointments[0].date + " (" + getDayOfWeek(appointments[0].date) + ")";
+document.getElementById('currentTime').textContent = appointments[0].time;
+document.getElementById('currentDoctor').textContent = getDoctorName(appointments[0].doctor);
+document.getElementById('currentHospital').textContent = appointments[0].hospital;
+let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+
+</script>
+
+</body>
+</html>

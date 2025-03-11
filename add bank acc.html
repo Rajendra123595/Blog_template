@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Bank Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .btn.logout {
+            background: #FF8C00;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn.logout:hover {
+            opacity: 0.9;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            background: #008C45;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        .btn.cancel { background: #DC3545; }
+        .btn.another { background: #007BFF; }
+        .btn.back { background: #E67E22; }
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Hospital Logo" class="logo">
+        <p class="patient-id">Patient ID: <span id="patient-id">12345</span></p>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic">
+            <button class="btn logout" onclick="location.href='index.html'">Logout</button>
+        </div>
+    </div>
+
+    <h2>Add Bank Account</h2>
+    
+    <form id="bank-form">
+        <label>Bank Name:</label>
+        <input type="text" id="bank-name" required>
+        
+        <label>Account Number:</label>
+        <input type="number" id="account-number" required>
+        
+        <label>Confirm Account:</label>
+        <input type="number" id="confirm-account" required>
+        
+        <label>IFSC Code:</label>
+        <input type="text" id="ifsc-code" required>
+        
+        <label>Registered Mobile:</label>
+        <input type="tel" id="registered-mobile" required>
+
+        <button type="submit" class="btn" onclick="addBankAccount()">Add Account</button>
+        <button type="button" class="btn back" onclick="goBack()">Back</button>
+    </form>
+</div>
+
+<script>
+    function logout() {
+        alert("You have been logged out.");
+        window.location.href = "login.html";
+    }
+    function cancel() {
+        window.history.back();
+    }
+    function goBack() {
+        window.history.back();
+    }
+    function addAnother() {
+        document.getElementById("bank-form").reset();
+        alert("You can now add another bank account.");
+    }
+    function addBankAccount() {
+        alert("Bank account added successfully!");
+        window.history.back(); // Redirects to the previous page
+    }
+    let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+        
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency & Alerts</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 180px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .action-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            width: 250px;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #FF8C00;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background: darkred;
+        }
+        #emergency-log {
+            width: 100%;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-content {
+            
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .content {
+            margin-left: 200px;
+            
+            flex-grow: 1;
+            padding: 30px;
+        }
+        input, select {
+            display: block;
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+    
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+            
+            <ul>
+               <li onclick="location.href='employee dashboard.html'">Dashboard</li>
+               <li onclick="location.href='appointments.html'">Appointments</li>
+               <li onclick="location.href='patient management.html'">Patient Management</li>
+               <li onclick="location.href='employee medical reports.html'">Medical Reports</li>
+               <li onclick="location.href='internal messaging.html'">Internal Messaging</li>
+               <li onclick="location.href='employee billing and insurance.html'">Billing & Insurance</li>
+               <li onclick="location.href='employee settings.html'">Settings</li>
+               <li onclick="location.href='employee pharmacy and integration.html'">Prescriptions & Pharmacy</li>
+               <li class="active" onclick="location.href='emergency alerts.html'">Emergency Alerts</li>
+            </ul>
+        
+    </div>
+    <div class="content">
+        <div class="header">
+            <h2>Emergency Alerts</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+
+        <h2>Emergency & Alerts</h2>
+        <button onclick="sendEmergencyAlert()">Send Emergency Alert</button>
+        <button onclick="dispatchAmbulance()">Dispatch Ambulance</button>
+        
+        <p id="location-info">Fetching location...</p>
+        <div id="map"></div>
+    
+        <label>Patient Name:</label>
+        <input type="text" id="patient-name" placeholder="Enter Patient Name" readonly>
+        
+        <label>Emergency Type:</label>
+        <select id="emergency-type" disabled>
+            <option value="Cardiac Arrest">Cardiac Arrest</option>
+            <option value="Accident">Accident</option>
+            <option value="Fire">Fire</option>
+        </select>
+        
+        <label>Severity Level:</label>
+        <select id="severity-level" disabled>
+            <option value="Critical">Critical</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+        
+        <div id="emergency-log">
+            <h3>Emergency Log</h3>
+            <ul></ul>
+        </div>
+        <button class="back-btn" onclick="goBack()">⬅ Back</button>
+    </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN6BNE9e3Htel1_TSCozwfQJNShZspbK4&callback=initMap" async defer></script>
+    <script>
+        
+    let map;
+    let marker;
+    let alertSound = new Audio('big_horn.mp3'); // Emergency big horn sound
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 0, lng: 0 },
+            zoom: 15,
+        });
+        marker = new google.maps.Marker({
+            position: { lat: 0, lng: 0 },
+            map: map,
+            title: "Patient Location",
+        });
+        getLocation();
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition((position) => {
+                const userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                };
+                map.setCenter(userLocation);
+                marker.setPosition(userLocation);
+                document.getElementById("location-info").innerText = `Latitude: ${userLocation.lat}, Longitude: ${userLocation.lng}`;
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function sendEmergencyAlert() {
+        alert("🚨 Emergency Alert Sent to Hospital!");
+        document.getElementById("patient-name").value = "John Doe";
+        document.getElementById("emergency-type").value = "Cardiac Arrest";
+        document.getElementById("severity-level").value = "Critical";
+        document.getElementById("emergency-log").innerHTML += "<li>New Emergency Alert Received!</li>";
+
+        // Play emergency sound when clicking the button
+        playEmergencySound();
+        
+        fetch("https://hospital-api.com/emergency", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                patientName: "John Doe",
+                emergencyType: "Cardiac Arrest",
+                severityLevel: "Critical",
+                patientLocation: document.getElementById("location-info").innerText,
+                timestamp: new Date().toLocaleString()
+            })
+        });
+    }
+
+    function dispatchAmbulance() {
+        alert("🚑 Ambulance Dispatched to Patient Location!");
+        fetch("https://ambulance-api.com/dispatch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                patientLocation: document.getElementById("location-info").innerText,
+                assignedAmbulance: "Ambulance #24"
+            })
+        });
+    }
+
+    function playEmergencySound() {
+        alertSound.currentTime = 0; // Restart sound if already playing
+        alertSound.play().catch(error => {
+            console.log("Autoplay blocked, requiring user interaction:", error);
+        });
+    }
+    let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+</script>
+
+    
+    
+
+</body>
+</html>

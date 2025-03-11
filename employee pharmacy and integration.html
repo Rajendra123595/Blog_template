@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescriptions & Pharmacy</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #ffffff50;
+        }
+        
+        .sidebar ul li.active, .sidebar ul li:hover {
+            background: #007BFF;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .main-content {
+            
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .action-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            width: 250px;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #FF8C00;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        .btn {
+            background: #FF8C00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+            <ul>
+                <li onclick="location.href='employee dashboard.html'">Dashboard</li>
+               <li onclick="location.href='appointments.html'">Appointments</li>
+               <li onclick="location.href='patient management.html'">Patient Management</li>
+               <li onclick="location.href='employee medical reports.html'">Medical Reports</li>
+               <li onclick="location.href='internal messaging.html'">Internal Messaging</li>
+               <li onclick="location.href='employee billing and insurance.html'">Billing & Insurance</li>
+               <li onclick="location.href='employee settings.html'">Settings</li>
+               <li class="active" onclick="location.href='employee pharmacy and integration.html'">Prescriptions & Pharmacy</li>
+               <li onclick="location.href='emergency alerts.html'">Emergency Alerts</li>
+            </ul>
+        </aside>
+        <div class="main-content">
+        <div class="header">
+            <h2>Prescriptions & Pharmacy Integration</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+
+        <main class="content">
+            <h2>Prescriptions & Pharmacy Integration</h2>
+            <label>Patient Name:</label>
+            <input type="text" id="patient-name" placeholder="Enter Patient Name">
+            
+            <label>Medication:</label>
+            <input type="text" id="medication" placeholder="Enter Medication">
+            
+            <label>Dosage:</label>
+            <input type="text" id="dosage" placeholder="Enter Dosage">
+            
+            <label>Pharmacy:</label>
+            <select id="pharmacy">
+                <option value="Hospital Pharmacy">Hospital Pharmacy</option>
+                <option value="City Pharmacy">City Pharmacy</option>
+                <option value="Online Pharmacy">Online Pharmacy</option>
+            </select>
+            <label>Notes:</label>
+            <input type="text" id="Notes" placeholder="Enter Text">
+            
+            <button onclick="submitPrescription()">Submit Prescription</button>
+            <button onclick="downloadPDF()" class="btn">Download PDF</button>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function submitPrescription() {
+    const patientName = document.getElementById("patient-name").value;
+    const medication = document.getElementById("medication").value;
+    const dosage = document.getElementById("dosage").value;
+    const pharmacy = document.getElementById("pharmacy").value;
+    const Notes = document.getElementById("Notes").value;
+
+    if (patientName && medication && dosage && Notes) {
+        const prescriptionData = {
+            patient_name: patientName,
+            medication: medication,
+            dosage: dosage,
+            pharmacy: pharmacy,
+            Notes: Notes
+        };
+
+        // API Endpoint (Replace with actual API number/URL)
+        const apiUrl = "AIzaSyAN6BNE9e3Htel1_TSCozwfQJNShZspbK4"; // Example API URL
+
+        fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(prescriptionData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Prescription sent successfully!");
+            } else {
+                alert("Failed to send prescription.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while sending the prescription.");
+        });
+    } else {
+        alert("Please fill in all fields.");
+    }
+}
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.text("Prescription Details", 10, 10);
+            doc.text("Patient Name: " + document.getElementById("patient-name").value, 10, 20);
+            doc.text("Medication: " + document.getElementById("medication").value, 10, 30);
+            doc.text("Dosage: " + document.getElementById("dosage").value, 10, 40);
+            doc.text("Pharmacy: " + document.getElementById("pharmacy").value, 10, 50);
+            doc.text("Notes: " + document.getElementById("Notes").value, 10, 60);
+            
+            doc.save("prescription.pdf");
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

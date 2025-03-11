@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        .main-content {
+            margin-left: 220px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .dashboard-section {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+        .stat-box {
+            padding: 20px;
+            
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+        }
+        .employees { background: #2ecc71; }
+        .finance { background: #f39c12; }
+        .emergency { background: #e74c3c; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li class="active" onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li onclick="location.href='finance.html'">Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Higher Officials Dashboard</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+    
+        <h1>Hospital Dashboard</h1>
+        <label for="hospitalSelect">Select a Hospital:</label>
+        <select id="hospitalSelect" onchange="updateHospitalDetails()">
+        </select>
+        <div class="dashboard-section">
+            <h3>Hospital Details</h3>
+            <p><strong>Name:</strong> <span id="hospitalName">-</span></p>
+            <p><strong>Town:</strong> <span id="town">-</span></p>
+            <p><strong>District:</strong> <span id="district">-</span></p>
+            <p><strong>State:</strong> <span id="state">-</span></p>
+            <div class="stats">
+                <div class="stat-box employees">
+                    <h3>Total Patients</h3>
+                    <p id="patientsCount">0</p>
+                </div>
+                <div class="stat-box emergency">
+                    <h3>Active Employees</h3>
+                    <p id="employeesCount">0</p>
+                </div>
+                <div class="stat-box finance">
+                    <h3>Revenue</h3>
+                    <p id="revenue">₹0M</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+        const hospitals = [
+            {name: "Apollo Hospital", town: "Hyderabad", district: "Rangareddy", state: "Telangana"},
+            {name: "Fortis Hospital", town: "Delhi", district: "Central", state: "Delhi"},
+            {name: "AIIMS", town: "New Delhi", district: "South", state: "Delhi"},
+            {name: "Narayana Hospital", town: "Bangalore", district: "Urban", state: "Karnataka"},
+            {name: "Medanta Hospital", town: "Gurgaon", district: "Gurgaon", state: "Haryana"},
+            {name: "Manipal Hospital", town: "Jaipur", district: "Jaipur", state: "Rajasthan"},
+            {name: "KIMS Hospital", town: "Vishakhapatnam", district: "Vizag", state: "Andhra Pradesh"},
+            {name: "Max Healthcare", town: "Noida", district: "Gautam Buddha Nagar", state: "Uttar Pradesh"},
+            {name: "Global Hospitals", town: "Chennai", district: "Chennai", state: "Tamil Nadu"},
+            {name: "Care Hospitals", town: "Mumbai", district: "Mumbai", state: "Maharashtra"},
+            {name: "Columbia Asia", town: "Pune", district: "Pune", state: "Maharashtra"},
+            {name: "Ruby Hall Clinic", town: "Nagpur", district: "Nagpur", state: "Maharashtra"},
+            {name: "Jupiter Hospital", town: "Thane", district: "Thane", state: "Maharashtra"},
+            {name: "Amrita Institute", town: "Kochi", district: "Ernakulam", state: "Kerala"},
+            {name: "Aster Medcity", town: "Trivandrum", district: "Thiruvananthapuram", state: "Kerala"}
+        ];
+        
+        const hospitalSelect = document.getElementById("hospitalSelect");
+        hospitals.forEach((hospital, index) => {
+            let option = document.createElement("option");
+            option.value = index;
+            option.textContent = hospital.name;
+            hospitalSelect.appendChild(option);
+        });
+        
+        function updateHospitalDetails() {
+            let selectedHospital = hospitals[hospitalSelect.value];
+            document.getElementById("hospitalName").textContent = selectedHospital.name;
+            document.getElementById("town").textContent = selectedHospital.town;
+            document.getElementById("district").textContent = selectedHospital.district;
+            document.getElementById("state").textContent = selectedHospital.state;
+        }
+        
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        let revenue = 0;
+        function updateCounts() {
+            document.getElementById("patientsCount").textContent = getRandomNumber(1000, 5000);
+            document.getElementById("employeesCount").textContent = getRandomNumber(100, 1000);
+            revenue = Math.min(revenue + getRandomNumber(100, 500), 4000);
+            document.getElementById("revenue").textContent = "₹" + (revenue / 1000).toFixed(2) + "M";
+        }
+        
+        setInterval(updateCounts, 2000);
+        updateHospitalDetails();
+        updateCounts();
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

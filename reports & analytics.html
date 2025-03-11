@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            margin: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+        .stat-box {
+            flex: 1;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+        }
+        .total { background: #3498db; }
+        .employees { background: #2ecc71; }
+        .finance { background: #f39c12; }
+        .emergency { background: #e74c3c; }
+        .reports {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+        .header {
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 700px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li  onclick="location.href='finance.html'" >Finance</li>
+            <li class="active" onclick="location.href='reports & analytics.html'"  >Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+        <div class="main-content">
+        <div class="header">
+            <h2>Reports & Analytics</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+            <h2>📊 Reports & Analytics</h2>
+            <label for="hospital-select">Select Hospital:</label>
+            <select id="hospital-select" onchange="updateDashboard()">
+                <option value="Apollo Hospital">Apollo Hospital</option>
+                <option value="City Hospital">City Hospital</option>
+                <option value="Metro Healthcare">Metro Healthcare</option>
+            </select>
+            <div class="stats">
+                <div class="stat-box total"><h3>Total Patients</h3><p id="totalPatients">0</p></div>
+                <div class="stat-box employees"><h3>Active Employees</h3><p id="activeEmployees">0</p></div>
+                <div class="stat-box finance"><h3>Revenue Generated</h3><p id="totalRevenue">₹0M</p></div>
+                <div class="stat-box emergency"><h3>Emergency Cases</h3><p id="emergencyCases">0</p></div>
+            </div>
+            <section class="chart-section">
+                <h3>📈 Hospital Performance</h3>
+                <canvas id="hospitalPerformanceChart"></canvas>
+            </section>
+            <section class="chart-section">
+                <h3>📊 Employee Efficiency</h3>
+                <canvas id="employeeEfficiencyChart"></canvas>
+            </section>
+            <section class="chart-section">
+                <h3>📉 Patient Feedback Trends</h3>
+                <canvas id="patientFeedbackChart"></canvas>
+            </section>
+            <section class="reports">
+                <h3>📄 Download Reports</h3>
+                <button onclick="downloadPDF()">Download PDF</button>
+            </section>
+        
+    </div>
+    <script>
+        const hospitalData = {
+            "Apollo Hospital": { patients: 15000, employees: 1200, revenue: 5200000, emergency: 450 },
+            "City Hospital": { patients: 12000, employees: 950, revenue: 4300000, emergency: 390 },
+            "Metro Healthcare": { patients: 13500, employees: 1100, revenue: 4900000, emergency: 420 }
+        };
+        
+        function getRandomValue(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+
+
+        function updateDashboard() {
+            let hospital = document.getElementById("hospital-select").value;
+            let data = hospitalData[hospital];
+            document.getElementById("totalPatients").innerText = getRandomValue(10000, 20000);
+            document.getElementById("activeEmployees").innerText = getRandomValue(800, 1500);
+            document.getElementById("totalRevenue").innerText = `₹${(getRandomValue(3, 7)).toFixed(1)}M`;
+            document.getElementById("emergencyCases").innerText = getRandomValue(300, 600);
+
+            updateChart(hospitalPerformanceChart, Array.from({ length: 12 }, () => Math.floor(data.revenue / 12 + Math.random() * 500000)));
+            updateChart(employeeEfficiencyChart, Array.from({ length: 12 }, () => Math.floor(data.employees / 12 + Math.random() * 50)));
+            updateChart(patientFeedbackChart, Array.from({ length: 3 }, () => Math.floor(Math.random() * 100)));
+        }
+
+        function updateChart(chart, newData) {
+            chart.data.datasets[0].data = newData;
+            chart.update();
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Hospital Performance Report", 10, 10);
+            doc.text("Selected Hospital: " + document.getElementById("hospital-select").value, 10, 20);
+            doc.save("Hospital_Report.pdf");
+        }
+
+        const hospitalPerformanceChart = new Chart(document.getElementById('hospitalPerformanceChart').getContext('2d'), {
+            type: 'line',
+            data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul','Aug','Sep','Oct','Nov','Dec'], datasets: [{ label: 'Revenue ($)', data: [], borderColor: '#3498db', borderWidth: 2 }] },
+            options: { responsive: true }
+        });
+
+        const employeeEfficiencyChart = new Chart(document.getElementById('employeeEfficiencyChart').getContext('2d'), {
+            type: 'bar',
+            data: { labels: ['Doctors','Nurses','Technicians','Admin'], datasets: [{ label: 'Efficiency (%)', data: [], backgroundColor: '#2ecc71' }] },
+            options: { responsive: true }
+        });
+
+        const patientFeedbackChart = new Chart(document.getElementById('patientFeedbackChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Satisfied', 'Neutral', 'Dissatisfied'],
+                datasets: [{
+                    data: [70, 20, 10],
+                    backgroundColor: ['#2ecc71', '#f1c40f', '#e74c3c']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        window.onload = updateDashboard;
+        setInterval(updateDashboard, 2000);
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

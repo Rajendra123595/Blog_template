@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Swasth India</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1C1C1C;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .captcha {
+            font-weight: bold;
+            font-size: 20px;
+            color: #FF8C00;
+            background: #F0F0F0;
+            padding: 5px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-secondary {
+            background-color: #008C45;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .links {
+            margin-top: 10px;
+        }
+        .links a {
+            color: #1C1C1C;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo" class="logo">
+        <h2>Sign Up</h2>
+        <input type="text" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <button class="btn-secondary" onclick="sendVerification()">Send Verification Code</button>
+        <input type="text" id="verificationCode" placeholder="Enter Verification Code" required>
+        <input type="password" id="newPassword" placeholder="New Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <div>
+            <span class="captcha" id="captcha"></span>
+            <button type="button" onclick="generateCaptcha()">↻</button>
+        </div>
+        <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" required>
+        <button class="btn-primary"  onclick="validateSignup()" onclick="location.href='patient login page.html'" >Sign Up</button>
+        <div class="links">
+            <a href="patient login page.html">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <script>
+        function generateCaptcha() {
+            let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captcha').textContent = captcha;
+        }
+
+        function validateSignup() {
+            let enteredCaptcha = document.getElementById('captchaInput').value;
+            let actualCaptcha = document.getElementById('captcha').textContent;
+            let newPassword = document.getElementById('newPassword').value;
+            let confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (enteredCaptcha !== actualCaptcha) {
+                alert('Please enter a valid CAPTCHA.');
+                generateCaptcha();
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            alert('Signup successful!');
+        }
+
+        function sendVerification() {
+            let email = document.getElementById('email').value;
+            if (email) {
+                alert('Verification code sent to ' + email);
+            } else {
+                alert('Please enter a valid email.');
+            }
+        }
+
+        window.onload = generateCaptcha;
+    </script>
+</body>
+</html>

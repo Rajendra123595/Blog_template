@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Swasth India</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 180px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        .main-content {
+            margin-left: 200px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        p {
+            margin: 20px 0;
+        }
+        .bank-account-section {
+            margin-top: 30px;
+        }
+        .bank-account-btn {
+            background: #008C45;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin-top: 10px;
+        }
+        .bank-account-btn:hover {
+            background: #FF8C00;
+        }
+        .save-btn {
+            background: #FF8C00;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".sidebar ul li:first-child").classList.add("active");
+            
+            let lastAppointmentDate = "2024-02-15";
+            document.getElementById("last-appointment").textContent = lastAppointmentDate;
+            
+            document.getElementById("view-reports").addEventListener("click", function(event) {
+                event.preventDefault();
+                document.querySelector(".reports-section").style.display = "block";
+                document.querySelector(".reports-section").innerHTML = "<h3>Medical Reports</h3><p>Report 1: Blood Test - Normal</p><p>Report 2: X-Ray - No Issues</p>";
+            });
+            
+            const nameInput = document.getElementById("name");
+            const ageInput = document.getElementById("age");
+            const bloodGroupInput = document.getElementById("blood-group");
+            const saveButton = document.querySelector(".save-btn");
+
+            if (localStorage.getItem("name")) nameInput.value = localStorage.getItem("name");
+            if (localStorage.getItem("age")) ageInput.value = localStorage.getItem("age");
+            if (localStorage.getItem("bloodGroup")) bloodGroupInput.value = localStorage.getItem("bloodGroup");
+
+            saveButton.addEventListener("click", function() {
+                localStorage.setItem("name", nameInput.value);
+                localStorage.setItem("age", ageInput.value);
+                localStorage.setItem("bloodGroup", bloodGroupInput.value);
+                alert("Patient details saved successfully!");
+            });
+            let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+        });
+        
+        
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li class="active" onclick="location.href='patient health summary.html'">Patient Health Summary</li>
+            <li onclick="location.href='quick axns page.html'">Quick Actions</li>
+            <li onclick="location.href='upcoming.html'">Upcoming Appointments & Reminders</li>
+            <li onclick="location.href='recent lab reports and prescriptions.html'">Recent Lab Reports & Prescriptions</li>
+            <li onclick="location.href='billing and payment status.html'">Billing & Payment Status</li>
+            <li onclick="location.href='customer support.html'">Chat & Customer Support</li>
+            <li onclick="location.href='emergency contact.html'">Emergency Contact</li>
+            <li onclick="location.href='hospital availability.html'">Hospital Availability</li>
+            <li onclick="location.href='feedback.html'">Feedback Page</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Patient Dashboard</h2>
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <div id="content">
+            <h3>Patient Health Summary</h3>
+            <label>Name: <input type="text"></label>
+            <label>Age: <input type="text"></label>
+            <label>Blood Group: <input type="text"></label>
+            <p>Recent Checkups & Reports: <a href="#" id="view-reports">View Reports</a></p>
+            <div class="bank-account-section">
+                <p>Last Appointment Details: <span id="last-appointment"></span></p>
+                <button class="save-btn">Save</button>
+                <button class="bank-account-btn" onclick="location.href='add bank acc.html'">Add Bank Account</button>
+            </div>
+        </div>
+        <div class="reports-section"></div>
+        </div>
+    </div>
+</body>
+</html>

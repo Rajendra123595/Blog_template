@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Cases & Critical Alerts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+}
+
+.sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+        .container {
+            margin-left: 0px;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        
+        .header {
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        
+.main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 700px;
+            height: 500px;
+        }
+        
+        
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li class="active" onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li onclick="location.href='finance.html'">Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Emergency Cases</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+    <div class="container">
+        <h2>Emergency Cases & Critical Alerts</h2>
+        <label for="hospital-select">Select Hospital:</label>
+        <select id="hospital-select" onchange="filterCases()">
+            <option value="">Select a Hospital</option>
+        </select>
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Emergency Reason</th>
+                    <th>Beds Available</th>
+                </tr>
+            </thead>
+            <tbody id="emergency-table">
+            </tbody>
+        </table>
+        <canvas id="stateChart"></canvas>
+    </div>
+
+    <script>
+        const emergencyCases = [
+            { patient: "John Doe", hospital: "City Hospital", reason: "Accident", beds: 10 },
+            { patient: "Jane Smith", hospital: "Greenwood Clinic", reason: "Cardiac Arrest", beds: 5 },
+            { patient: "Alice Brown", hospital: "Sunrise Medical Center", reason: "Stroke", beds: 7 },
+            { patient: "Bob Wilson", hospital: "Hope Wellness Hospital", reason: "Accident", beds: 3 },
+            { patient: "Charlie Davis", hospital: "Metro Healthcare", reason: "Respiratory Distress", beds: 8 },
+            { patient: "Emma Thomas", hospital: "Apollo Hospital", reason: "Heart Attack", beds: 6 },
+            { patient: "Liam Johnson", hospital: "Gandhi Hospital", reason: "Severe Injury", beds: 4 }
+        ];
+
+        function populateHospitalDropdown() {
+            const hospitalSelect = document.getElementById("hospital-select");
+            const hospitals = [...new Set(emergencyCases.map(caseData => caseData.hospital))];
+            hospitals.forEach(hospital => {
+                let option = document.createElement("option");
+                option.value = hospital;
+                option.textContent = hospital;
+                hospitalSelect.appendChild(option);
+            });
+        }
+
+        function filterCases() {
+            const selectedHospital = document.getElementById("hospital-select").value;
+            const tableBody = document.getElementById("emergency-table");
+            tableBody.innerHTML = "";
+            
+            const selectedCases = emergencyCases.filter(c => c.hospital === selectedHospital);
+            if (selectedCases.length > 0) {
+                selectedCases.forEach(caseData => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${caseData.patient}</td>
+                        <td>${caseData.reason}</td>
+                        <td id="bed-count">${caseData.beds}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                updateBeds();
+            }
+        }
+
+        function updateBeds() {
+            setInterval(() => {
+                const bedElement = document.getElementById("bed-count");
+                if (bedElement) {
+                    bedElement.textContent = Math.max(0, Math.floor(Math.random() * 10));
+                }
+            }, 3000);
+        }
+
+        function updateChart() {
+            const ctx = document.getElementById("stateChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Andhra Pradesh", "Telangana", "Karnataka", "Tamil Nadu", "Maharashtra", "West Bengal"],
+                    datasets: [{
+                        label: "Emergency Cases",
+                        data: Array.from({ length: 6 }, () => Math.floor(Math.random() * 50) + 1),
+                        backgroundColor: ["#007BFF", "#FF5733", "#33FF57", "#FF33A8", "#FFD700", "#8A2BE2"]
+                    }]
+                },
+                options: {
+                    animation: {
+                        duration: 500,
+                        easing: "easeInOutBounce"
+                    }
+                }
+            });
+        }
+
+        setInterval(updateChart, 5000);
+        document.addEventListener("DOMContentLoaded", () => {
+            populateHospitalDropdown();
+        });
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

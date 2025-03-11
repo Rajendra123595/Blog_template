@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .btn.logout {
+            background: #FF8C00;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn.logout:hover {
+            opacity: 0.9;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        .payment-details {
+            text-align: left;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .payment-details span {
+            font-weight: bold;
+        }
+        .payment-method {
+            text-align: left;
+            margin: 15px 0;
+        }
+        .btn {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .btn.pay {
+            background: #008C45;
+            color: white;
+        }
+        .btn.back {
+            background: #FF8C00;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function logout() {
+            alert("Logged Out Successfully!");
+            window.location.href = "login.html"; // Redirect to login page
+        }
+
+        function goBack() {
+            window.history.back(); // Go to the previous page
+        }
+
+        // Function to get the stored booking date
+        function loadBookingDetails() {
+            let storedDate = localStorage.getItem("bookingDate") || "2024-02-10"; 
+            document.getElementById("booking-date").textContent = storedDate;
+        }
+
+        window.onload = loadBookingDetails;
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Hospital Logo" class="logo" id="hospital-logo">
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic" id="profile-pic">
+                <button class="btn logout" id="logout-btn" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+
+        <h2 id="payment-title">Make a Payment</h2>
+        <h3>Book Appointment</h3>
+        <h4>Appointment Fee Payment</h4>
+
+        <div class="payment-details">
+            <p><span>Service:</span> Doctor Consultation</p>
+            <p><span>Date:</span> <span id="booking-date"></span></p>
+            <p><span>Fee:</span> ₹200</p>
+        </div>
+
+        <div class="payment-method">
+            <h4>Select Payment Method</h4>
+            <label><input type="radio" name="payment" value="card"> Credit / Debit Card</label><br>
+            <label><input type="radio" name="payment" value="upi"> UPI</label><br>
+            <label><input type="radio" name="payment" value="netbanking"> Net Banking</label><br>
+        </div>
+
+        <button class="btn pay" id="pay-btn" onclick="location.href='confirm payment.html'">Proceed to Pay</button>
+        <button class="btn back" id="back-btn" onclick="location.href='Book an appointment.html'">Back</button>
+    </div>
+
+</body>
+</html>

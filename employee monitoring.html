@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Monitoring & Management</title>
+    <style>
+    body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+.sidebar select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+}
+select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+.main-content {
+    margin-left: 220px;
+    flex-grow: 1;
+    padding: 30px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+.header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 1000px;
+            height: 500px;
+        }
+        
+</style>
+
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li class="active" onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li onclick="location.href='finance.html'">Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+        
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Employee Monitoring & Management</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+    
+    
+        <h1>Employee Monitoring</h1>
+        
+        <label for="hospital-select">Select Hospital:</label>
+        <select id="hospital-select" onchange="loadHospitalDetails()">
+            <option value="">-- Select a Hospital --</option>
+        </select>
+        <div class="hospital-details">
+            <h3>Hospital Details</h3>
+            <p><strong>Name:</strong> <span id="hospitalName">-</span></p>
+            <p><strong>Town:</strong> <span id="town">-</span></p>
+            <p><strong>District:</strong> <span id="district">-</span></p>
+            <p><strong>State:</strong> <span id="state">-</span></p>
+        </div>
+        <input type="text" id="search" placeholder="Search employees..." onkeyup="filterEmployees()">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody id="employee-table">
+                <!-- Dynamic Employee Data -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+      const hospitals = [
+    {name: "Apollo Hospital", town: "Hyderabad", district: "Rangareddy", state: "Telangana"},
+    {name: "Fortis Hospital", town: "Delhi", district: "Central", state: "Delhi"},
+    {name: "AIIMS", town: "New Delhi", district: "South", state: "Delhi"},
+    {name: "Narayana Hospital", town: "Bangalore", district: "Urban", state: "Karnataka"},
+    {name: "Medanta Hospital", town: "Gurgaon", district: "Gurgaon", state: "Haryana"},
+    {name: "Manipal Hospital", town: "Jaipur", district: "Jaipur", state: "Rajasthan"},
+    {name: "KIMS Hospital", town: "Vishakhapatnam", district: "Vizag", state: "Andhra Pradesh"},
+    {name: "Max Healthcare", town: "Noida", district: "Gautam Buddha Nagar", state: "Uttar Pradesh"},
+    {name: "Global Hospitals", town: "Chennai", district: "Chennai", state: "Tamil Nadu"}
+];
+
+const employees = {
+    "Apollo Hospital": [
+        {name: "Dr. John", role: "Surgeon", status: "On Duty", location: "Operation Theatre"},
+        {name: "Emma", role: "Nurse", status: "On Break", location: "Cafeteria"},
+    ],
+    "Fortis Hospital": [
+        {name: "Rajesh", role: "Cardiologist", status: "On Duty", location: "Cardiology Wing"},
+        {name: "Sita", role: "Receptionist", status: "Available", location: "Front Desk"},
+    ],
+    "AIIMS": [
+        {name: "Dr. John", role: "Surgeon", status: "On Duty", location: "Operation Theatre"},
+        {name: "Emma", role: "Nurse", status: "On Break", location: "Cafeteria"},
+    ],
+    "Narayana Hospital": [
+        {name: "Rajesh", role: "Cardiologist", status: "On Duty", location: "Cardiology Wing"},
+        {name: "Sita", role: "Receptionist", status: "Available", location: "Front Desk"},
+    ],
+};
+
+function loadHospitals() {
+    const select = document.getElementById("hospital-select");
+    hospitals.forEach(hospital => {
+        let option = document.createElement("option");
+        option.value = hospital.name;
+        option.textContent = hospital.name;
+        select.appendChild(option);
+    });
+}
+
+function loadHospitalDetails() {
+    let selectedHospital = document.getElementById("hospital-select").value;
+    let hospital = hospitals.find(h => h.name === selectedHospital);
+    
+    if (hospital) {
+        document.getElementById("hospitalName").textContent = hospital.name;
+        document.getElementById("town").textContent = hospital.town;
+        document.getElementById("district").textContent = hospital.district;
+        document.getElementById("state").textContent = hospital.state;
+
+        loadEmployees(hospital.name);
+    } else {
+        document.getElementById("hospitalName").textContent = "-";
+        document.getElementById("town").textContent = "-";
+        document.getElementById("district").textContent = "-";
+        document.getElementById("state").textContent = "-";
+        document.getElementById("employee-table").innerHTML = "";
+    }
+}
+
+function loadEmployees(hospitalName) {
+    const employeeTable = document.getElementById("employee-table");
+    employeeTable.innerHTML = "";
+    
+    if (employees[hospitalName]) {
+        employees[hospitalName].forEach(emp => {
+            let row = `<tr>
+                <td>${emp.name}</td>
+                <td>${emp.role}</td>
+                <td>${emp.status}</td>
+                <td>${emp.location}</td>
+            </tr>`;
+            employeeTable.innerHTML += row;
+        });
+    }
+}
+
+function filterEmployees() {
+    let query = document.getElementById("search").value.toLowerCase();
+    let employeeTable = document.getElementById("employee-table");
+    let rows = employeeTable.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+        let txtValue = rows[i].textContent || rows[i].innerText;
+        rows[i].style.display = txtValue.toLowerCase().includes(query) ? "" : "none";
+    }
+}
+
+window.onload = loadHospitals;
+let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+
+    </script>
+</body>
+</html>

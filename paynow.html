@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Make Payment</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F8F8F8;
+    color: #444444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.payment-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.payment-container h2 {
+    color: #008C45;
+    margin-bottom: 20px;
+}
+
+.payment-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.payment-item:last-child {
+    border-bottom: none;
+}
+
+.pay-btn, .loan-btn, .details-btn {
+    background: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.pay-btn:hover, .loan-btn:hover, .details-btn:hover {
+    background: #0056b3;
+}
+
+.loan-btn {
+    background: #FF8C00;
+}
+
+.loan-btn:hover {
+    background: #E67E22;
+}
+
+.details-container {
+    text-align: left;
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="payment-container">
+    <h2>Make Payment</h2>
+    <div id="payment-details"></div>
+    <button class="details-btn" onclick="showDetails()">Show Details</button>
+    <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+    <button class="loan-btn" onclick="applyForLoan()">Apply for Loan</button>
+    <div id="details-container" class="details-container"></div>
+</div>
+
+<script>
+let bills = JSON.parse(localStorage.getItem("bills")) || [];
+let selectedBillId = localStorage.getItem("selectedBill");
+let selectedBill = bills.find(bill => bill.id === selectedBillId);
+
+function renderPaymentDetails() {
+    const paymentDetails = document.getElementById("payment-details");
+    paymentDetails.innerHTML = "";
+
+    if (!selectedBill) {
+        paymentDetails.innerHTML = "<p>No bill selected for payment.</p>";
+        return;
+    }
+
+    const paymentItem = document.createElement("div");
+    paymentItem.classList.add("payment-item");
+    paymentItem.innerHTML = `
+        <div>
+            <p><strong>Bill ID:</strong> ${selectedBill.id}</p>
+            <p><strong>Amount:</strong> ${selectedBill.amount}</p>
+            <p><strong>Due Date:</strong> ${selectedBill.dueDate || 'N/A'}</p>
+            <p><strong>Type:</strong> ${selectedBill.type || 'General'}</p>
+        </div>
+    `;
+    paymentDetails.appendChild(paymentItem);
+}
+
+function showDetails() {
+    const detailsContainer = document.getElementById("details-container");
+    detailsContainer.innerHTML = "";
+
+    if (!selectedBill) {
+        detailsContainer.innerHTML = "<p>No details available.</p>";
+        return;
+    }
+    
+    let detailsHTML = `<p><strong>Charges Breakdown:</strong></p>`;
+    if (selectedBill.type === "medication") {
+        detailsHTML += `
+            <p><strong>Medication Cost:</strong> ₹${selectedBill.medicationCost || 'N/A'}</p>
+            <p><strong>Pharmacy Fee:</strong> ₹${selectedBill.pharmacyFee || 'N/A'}</p>
+        `;
+    } else {
+        detailsHTML += `
+            <p><strong>Consultation Fee:</strong> ₹1,000.00</p>
+            <p><strong>Lab Tests:</strong> ₹1,500.00</p>
+            <p><strong>Other Fees:</strong> ₹1,000.00</p>
+        `;
+    }
+    detailsHTML += `<p><strong>Total Charges:</strong> ${selectedBill.amount}</p>`;
+    detailsContainer.innerHTML = detailsHTML;
+}
+
+function processPayment() {
+    if (!selectedBill) {
+        alert("No bill selected for payment.");
+        return;
+    }
+    
+    alert(`Payment of ${selectedBill.amount} for Bill ID ${selectedBill.id} processed successfully!`);
+    
+    // Remove from pending bills
+    bills = bills.filter(bill => bill.id !== selectedBill.id);
+    localStorage.setItem("bills", JSON.stringify(bills));
+    localStorage.removeItem("selectedBill");
+    
+    // Redirect to billing status
+    window.location.href = "paynow1.html";
+}
+
+function applyForLoan() {
+    if (!selectedBill) {
+        alert("No bill selected for loan application.");
+        return;
+    }
+    alert(`Loan application for ${selectedBill.amount} for Bill ID ${selectedBill.id} initiated!`);
+    window.location.href = "billing and payment status.html";
+}
+
+renderPaymentDetails();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Feedback & Satisfaction</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+}
+
+.sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+.main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: #1abc9c;
+    color: white;
+}
+
+.feedback-overview {
+    margin: 20px 0;
+    width: 50%;
+}
+.header {
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        
+        
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li class="active" onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li onclick="location.href='finance.html'">Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Patient Feedback & Satisfaction</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <label for="hospital-select">Select Hospital:</label>
+        <select id="hospital-select" onchange="loadFeedback()">
+            <option value="">-- Select a Hospital --</option>
+        </select>
+        <div class="hospital-details">
+            <h3>  Hospital Details</h3>
+            <p><strong> Name:</strong> <span id="hospitalName">-</span></p>
+            <p><strong> Town:</strong> <span id="town">-</span></p>
+            <p><strong> District:</strong> <span id="district">-</span></p>
+            <p><strong> State:</strong> <span id="state">-</span></p>
+        </div>
+        <div class="feedback-overview">
+            <h2>Feedback Overview</h2>
+            <canvas id="feedbackChart"></canvas>
+        </div>
+        <h2>Patient Feedback</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Feedback</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody id="feedback-table"></tbody>
+        </table>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadHospitals();
+            updateFeedbackChart();
+            setInterval(updateFeedbackChart, 2000);
+        });
+
+        const hospitals = [
+    { name: "City Hospital", town: "Hyderabad", district: "Brooklyn", state: "TG" },
+     { name: "Greenwood Clinic", town: "Chirala", district: "Hollywood", state: "AP" },
+     { name: "Sunrise Medical Center", town: "Ongole", district: "Hollywood", state: "AP" },
+     { name: "Hope Wellness Hospital", town: "Visakhapatnam", district: "Hollywood", state: "AP" },
+     { name: "Metro Healthcare", town: "Tirupati", district: "Hollywood", state: "AP" },
+     
+];
+
+// Dummy Feedback Data
+const feedbackData = {
+    "City Hospital": [
+        { patient: "John", feedback: "Great!", rating: "★★★★★" },
+        { patient: "Smith", feedback: "Nice", rating: "★★★★☆" }
+    ],
+    
+    "Greenwood Clinic": [
+        { patient: "Emma", feedback: "Satisfactory", rating: "★★★☆☆" },
+        { patient: "Liam", feedback: "Could be better", rating: "★★☆☆☆" }
+    ],
+    "Sunrise Medical Center": [
+        { patient: "Ava", feedback: "Very good", rating: "★★★★★" },
+        { patient: "Noah", feedback: "Fine", rating: "★★★☆☆" }
+    ],
+    "Hope Wellness Hospital": [
+        { patient: "Sophia", feedback: "Excellent!", rating: "★★★★★" },
+        { patient: "William", feedback: "Alright", rating: "★★★★☆" }
+    ],
+    "Metro Healthcare": [
+        { patient: "Oliver", feedback: "Average", rating: "★★★☆☆" },
+        { patient: "Lucas", feedback: "Not great", rating: "★★☆☆☆" }
+     ]
+};
+
+        function loadHospitals() {
+            const select = document.getElementById("hospital-select");
+            hospitals.forEach(hospital => {
+                const option = document.createElement("option");
+                option.value = hospital.name;
+                option.textContent = hospital.name;
+                select.appendChild(option);
+            });
+        }
+
+        function loadFeedback() {
+            const selectedHospital = document.getElementById("hospital-select").value;
+            const feedbackTable = document.getElementById("feedback-table");
+            const hospitalDetails = hospitals.find(h => h.name === selectedHospital);
+
+            document.getElementById("hospitalName").textContent = hospitalDetails ? hospitalDetails.name : "-";
+            document.getElementById("town").textContent = hospitalDetails ? hospitalDetails.town : "-";
+            document.getElementById("district").textContent = hospitalDetails ? hospitalDetails.district : "-";
+            document.getElementById("state").textContent = hospitalDetails ? hospitalDetails.state : "-";
+            
+            feedbackTable.innerHTML = "";
+            if (selectedHospital && feedbackData[selectedHospital]) {
+                feedbackData[selectedHospital].forEach(item => {
+                    let row = `<tr><td>${item.patient}</td><td>${item.feedback}</td><td>${item.rating}</td></tr>`;
+                    feedbackTable.innerHTML += row;
+                });
+            }
+        }
+
+        let feedbackChart;
+function updateFeedbackChart() {
+    let happy = Math.floor(Math.random() * 50) + 50; // Random 50-100%
+    let neutral = Math.floor(Math.random() * (100 - happy)); // Remaining %
+    let sad = 100 - (happy + neutral); // Ensure 100%
+
+    const ctx = document.getElementById("feedbackChart").getContext("2d");
+
+    if (feedbackChart) {
+        feedbackChart.destroy();
+    }
+
+    feedbackChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Happy", "Neutral", "Sad"],
+            datasets: [{
+                label: "Feedback Percentage",
+                data: [happy, neutral, sad],
+                backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+}
+let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

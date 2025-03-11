@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organ Donor Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .btn.logout {
+            background: #FF8C00;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn.logout:hover {
+            opacity: 0.9;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        .input-group {
+            margin: 10px 0;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .btn.confirm {
+            background: #008C45;
+            color: white;
+        }
+        .btn.cancel {
+            background: #FF8C00;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .hidden {
+            display: none;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Logo" class="logo">
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic">
+        </div>
+        <h2>Organ Donor Registration</h2>
+        <form id="donor-form">
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+                <label for="age">Age</label>
+                <input type="number" id="age" placeholder="Age" required>
+            </div>
+            
+            <div class="input-group">
+              <label for="bloodType">Blood Type</label>
+               <select id="bloodType">
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+             </select>
+            </div>
+            <div class="input-group">
+                <label for="organ">Organ to Donate</label>
+                <select id="organ" required>
+                    <option value="Kidney">Kidney</option>
+                    <option value="Liver">Liver</option>
+                    <option value="Heart">Heart</option>
+                    <option value="Lungs">Lungs</option>
+                    <option value="Pancreas">Pancreas</option>
+                    <option value="Cornea">Cornea</option>
+                </select>
+            </div>
+            <button type="submit" class="btn confirm">Register as Donor</button>
+            <button type="button" class="btn cancel" onclick="window.history.back()">Cancel</button>
+        </form>
+        <p id="confirmation" class="hidden">Thank you for registering as an organ donor!</p>
+    </div>
+    <script>
+        document.getElementById("donor-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            document.getElementById("confirmation").classList.remove("hidden");
+            setTimeout(() => { window.location.href = "quick axns page.html"; }, 3000);
+        });
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Doctor's Notes</title>
+<style>
+/* Your CSS styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F8F8F8;
+    color: #444444;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #FF8C00, #008C45);
+    padding: 20px;
+    position: fixed;
+    top: 50px; 
+    height: calc(100% - 50px);
+    color: white;
+    overflow-y: auto;
+    width: 190px;
+}
+
+.sidebar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 12px;
+    border-bottom: 1px solid #F8F8F8;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover, .sidebar ul li.active {
+    background: #007BFF;
+    color: white;
+}
+
+.main-content {
+    margin-left: 200px;
+    flex-grow: 1; /* Allow main content to take up available space */
+    padding: 30px;
+    margin-top: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #566D7E;
+    padding: 20px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 500px;
+    margin: auto;
+}
+
+.header .patient-id {
+    font-size: 14px;
+    color: #EE7EA0;
+    font-weight: bold;
+}
+
+.header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.header .logout-btn {
+    background: #FF8C00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.header .logout-btn:hover {
+    background: #E67E22; /* Darker orange on hover */
+}
+
+.notes-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    max-width: 700px;
+}
+
+.notes-container h4 {
+    color: #008C45;
+    margin-bottom: 15px;
+}
+
+.note-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.note-item:last-child {
+    border-bottom: none;
+}
+
+.back-btn, .add-btn {
+    background: #008C45; /* Green */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.back-btn:hover, .add-btn:hover {
+    background: #006C35; /* Darker green on hover */
+}
+
+.back-btn {
+    width: 150px; /* Reduced width of back button */
+}
+
+#add-note-form input, #add-note-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0; /* Padding between lines */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="header">
+        <div>
+            <h2>Doctor's Notes</h2>
+            <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+        </div>
+        <div>
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="User Avatar">
+        </div>
+        <button class="logout-btn" onclick="location.href='3personslogin.html'" >Logout</button>
+    </div>
+
+    <div class="notes-container" id="notes-container">
+        <h4>Past Doctor's Notes</h4>
+        <div class="note-item" onclick="showNoteDetails('blood-sugar')">2024-07-26: Continue BP medication. Patient's BP stable. <em>Click for details</em></div>
+        <div class="note-item" onclick="showNoteDetails('mri-scan')">2024-07-22: Recommended MRI scan. Prescribed pain relief medication. <em>Click for details</em></div>
+        <div class="note-item" onclick="showNoteDetails('dizziness')">2024-07-19: Patient complained of dizziness. Advised to monitor blood sugar levels. <em>Click for details</em></div>
+        <button class="add-btn" onclick="showAddNote()">Add New Note</button>
+    </div>
+
+    <div class="notes-container" id="note-details" style="display:none;">
+        <h4 id="note-title"></h4>
+        <div id="note-content"></div>
+        <button class="back-btn" onclick="hideNoteDetails()">Back to Notes</button>
+    </div>
+
+    <div class="notes-container" id="add-note-container" style="display:none;">
+        <h4>Add New Doctor's Note</h4>
+        <form id="add-note-form">
+            <input type="date" id="note-date" placeholder="Date">
+            <textarea id="note-description" placeholder="Description"></textarea>
+            <textarea id="note-medications" placeholder="Medications"></textarea>
+            <textarea id="note-care-instructions" placeholder="Care Instructions"></textarea>
+            <button class="add-btn" type="button" onclick="addNewNote()">Save Note</button>
+        </form>
+        <button class="back-btn" onclick="hideAddNote()">Back to Notes</button>
+    </div>
+    <button class="back-btn" onclick="location.href='recent lab reports and prescriptions.html'">Back</button> <!-- Reduced width of this back button as well -->
+</div>
+
+<script>
+function showNoteDetails(noteType) {
+    document.getElementById('notes-container').style.display = 'none';
+    document.getElementById('note-details').style.display = 'block';
+    const noteTitle = document.getElementById('note-title');
+    const noteContent = document.getElementById('note-content');
+
+    if (noteType === 'blood-sugar') {
+        noteTitle.innerText = 'Blood Sugar Notes';
+        noteContent.innerHTML = `
+            <p><strong>Date:</strong> 2024-07-26</p>
+            <p><strong>Condition:</strong> Continue BP medication.</p>
+            <p><strong>Medications:</strong> Losartan, 50 mg daily.</p>
+            <p><strong>Care Instructions:</strong> Continue monitoring blood pressure daily. Maintain a low-sodium diet.</p>
+        `;
+    } else if (noteType === 'mri-scan') {
+        noteTitle.innerText = 'MRI Scan Notes';
+        noteContent.innerHTML = `
+            <p><strong>Date:</strong> 2024-07-22</p>
+            <p><strong>Condition:</strong> Recommended MRI scan.</p>
+            <p><strong>Medications:</strong> Ibuprofen, 400 mg as needed for pain.</p>
+            <p><strong>Care Instructions:</strong> Schedule MRI scan within the next week. Follow up with results.</p>
+        `;
+    } else if (noteType === 'dizziness') {
+        noteTitle.innerText = 'Dizziness Notes';
+        noteContent.innerHTML = `
+            <p><strong>Date:</strong> 2024-07-19</p>
+            <p><strong>Condition:</strong> Patient complained of dizziness.</p>
+            <p><strong>Medications:</strong> Metformin, 500 mg daily.</p>
+            <p><strong>Care Instructions:</strong> Monitor blood sugar levels daily. Increase water intake and avoid sudden movements.</p>
+        `;
+    } else if (noteType === 'new-note') {
+        const newNoteData = JSON.parse(window.localStorage.getItem('new-note'));
+        noteTitle.innerText = 'New Note Details';
+        noteContent.innerHTML = `
+            <p><strong>Date:</strong> ${newNoteData.date}</p>
+            <p><strong>Condition:</strong> ${newNoteData.description}</p>
+            <p><strong>Medications:</strong> ${newNoteData.medications}</p>
+            <p><strong>Care Instructions:</strong> ${newNoteData.careInstructions}</p>
+        `;
+    }
+}
+
+function hideNoteDetails() {
+    document.getElementById('note-details').style.display = 'none';
+    document.getElementById('notes-container').style.display = 'block';
+}
+
+function showAddNote() {
+    document.getElementById('notes-container').style.display = 'none';
+    document.getElementById('add-note-container').style.display = 'block';
+}
+
+function hideAddNote() {
+    document.getElementById('add-note-container').style.display = 'none';
+    document.getElementById('notes-container').style.display = 'block';
+}
+
+function addNewNote() {
+    const date = document.getElementById('note-date').value;
+    const description = document.getElementById('note-description').value;
+    const medications = document.getElementById('note-medications').value;
+    const careInstructions = document.getElementById('note-care-instructions').value;
+
+    if (date && description && medications && careInstructions) {
+        // Placeholder for actual logic to save the new note
+        const newNote = `
+            <div class="note-item" onclick="showNoteDetails('new-note')">
+                ${date}: ${description} <em>Click for details</em>
+            </div>
+        `;
+        document.getElementById('notes-container').insertAdjacentHTML('beforeend', newNote);
+
+        // Save the new note details (example logic)
+        window.localStorage.setItem('new-note', JSON.stringify({
+            date: date,
+            description: description,
+            medications: medications,
+            careInstructions: careInstructions
+        }));
+
+        // Clear the form
+        document.getElementById('note-date').value = '';
+        document.getElementById('note-description').value = '';
+        document.getElementById('note-medications').value = '';
+        document.getElementById('note-care-instructions').value = '';
+
+        // Show success message (optional)
+        alert('New note added successfully!');
+
+        // Return to notes list
+        hideAddNote();
+    } else {
+        alert('Please fill in all fields.');
+    }
+}
+
+function logout() {
+    // Placeholder for actual logout logic
+    alert('You have been logged out.');
+    window.location.href = 'login.html'; // Redirect to login page
+}
+
+let username = "patient123";
+let password = "securepass";
+let patientId = btoa(username + password).slice(0, 8);
+document.getElementById("patient-id").textContent = patientId;
+</script>
+
+</body>
+</html>

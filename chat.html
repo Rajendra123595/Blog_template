@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .btn.logout {
+            background: #FF8C00;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn.logout:hover {
+            opacity: 0.9;
+        }
+        .back-btn {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #E67E22;
+        }
+        h2 {
+            color: #007BFF;
+        }
+        .support-option {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .support-option a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .support-option a:hover {
+            text-decoration: underline;
+        }
+        .issue-section {
+            text-align: left;
+            margin-top: 15px;
+        }
+        .issue-type {
+            margin: 10px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 5px;
+        }
+        .submit-btn {
+            background: #008C45;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: #0056b3;
+        }
+      .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Hospital Logo" class="logo" id="hospital-logo">
+        <p class="patient-id">Patient ID: <span id="patient-id">N/A</span></p>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile" class="profile-pic" id="profile-pic">
+            <button class="btn logout" id="logout-btn" onclick="location.href='3personslogin.html'">Logout</button>
+        </div>
+    </div>
+
+    <h2>Contact Customer Support</h2>
+
+    <div class="support-option">
+        <strong>💬 Live Chat:</strong> <a href="#">Start Chat</a>
+    </div>
+    <div class="support-option">
+        <strong>📧 Email Support:</strong> <a href="mailto:support@hospital.com">swasthindiatata@hospital.com</a>
+    </div>
+    <div class="support-option">
+        <strong>📞 Call Support:</strong> <a href="tel:+9876543210">+91 765 43210</a>
+    </div>
+
+    <div class="issue-section">
+        <h3>Select Issue Type:</h3>
+        <div class="issue-type">
+            <input type="checkbox" id="appointment" value="Appointment Issue"> Appointment Issue
+        </div>
+        <div class="issue-type">
+            <input type="checkbox" id="billing" value="Billing Issue"> Billing Issue
+        </div>
+        <div class="issue-type">
+            <input type="checkbox" id="medical" value="Medical Reports"> Medical Reports
+        </div>
+        <div class="issue-type">
+            <input type="checkbox" id="technical" value="Technical Problems"> Technical Problems
+        </div>
+
+        <textarea id="issue-description" placeholder="Describe your issue (Optional)"></textarea>
+        <button class="submit-btn" onclick="submitIssue()">Submit Request</button>
+    </div>
+
+    <button class="back-btn" onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+    function submitIssue() {
+    let selectedIssues = [];
+    document.querySelectorAll('.issue-type input:checked').forEach(checkbox => {
+        selectedIssues.push(checkbox.value);
+    });
+
+    let description = document.getElementById("issue-description").value;
+
+    if (selectedIssues.length === 0) {
+        alert("Please select at least one issue type.");
+        return;
+    }
+
+    let issueData = {
+        issues: selectedIssues,
+        description: description,
+        timestamp: new Date().toLocaleString()
+    };
+
+    let storedIssues = JSON.parse(localStorage.getItem("supportRequests")) || [];
+    storedIssues.push(issueData);
+    localStorage.setItem("supportRequests", JSON.stringify(storedIssues));
+
+    alert("Your issue has been submitted successfully!");
+    document.getElementById("issue-description").value = "";
+    document.querySelectorAll('.issue-type input:checked').forEach(checkbox => checkbox.checked = false);
+
+    // Redirect to the previous page
+    window.history.back();
+}
+
+
+    function logout() {
+        alert("You have been logged out.");
+        window.location.href = "login.html";
+    }
+  let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+</script>
+
+</body>
+</html>

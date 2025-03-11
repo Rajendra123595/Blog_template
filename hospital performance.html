@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Performance & Location-Based Insights</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+}
+
+.sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+.main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+select {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: auto;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .header {
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 700px;
+            height: 500px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li class="active" onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li onclick="location.href='finance.html'">Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Hospital Performance</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <h2>Hospital Performance & Location-Based Insights</h2>
+        <label for="hospital-select">Select Hospital:</label>
+        <select id="hospital-select" onchange="updateHospitalData()">
+            <option value="">-- Select a Hospital --</option>
+        </select>
+
+        <div>
+            <p id="patientsTreated">Patients Treated: </p>
+            <p id="feedbackScore">Feedback Score: </p>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="hospitalChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const hospitals = [
+            { name: "City Hospital", emergencies: 200, responseTime: 8, staff: 120, patients: 500, feedbackScore: 85, revenue: 1000000 },
+            { name: "Greenwood Clinic", emergencies: 180, responseTime: 10, staff: 110, patients: 450, feedbackScore: 78, revenue: 850000 },
+            { name: "Sunrise Medical Center", emergencies: 220, responseTime: 7, staff: 140, patients: 600, feedbackScore: 90, revenue: 1200000 },
+            { name: "Hope Wellness Hospital", emergencies: 250, responseTime: 6, staff: 130, patients: 550, feedbackScore: 88, revenue: 1100000 },
+            { name: "Metro Healthcare", emergencies: 190, responseTime: 9, staff: 125, patients: 480, feedbackScore: 82, revenue: 950000 }
+        ];
+
+        function loadHospitals() {
+            const select = document.getElementById("hospital-select");
+            hospitals.forEach(hospital => {
+                let option = document.createElement("option");
+                option.value = hospital.name;
+                option.textContent = hospital.name;
+                select.appendChild(option);
+            });
+        }
+
+        let hospitalChart, performanceChart;
+        function updateHospitalData() {
+            const selectedHospital = document.getElementById("hospital-select").value;
+            const hospital = hospitals.find(h => h.name === selectedHospital);
+            if (hospital) {
+                const data = {
+                    labels: ["Emergencies Handled", "Avg Response Time", "Staff Availability"],
+                    datasets: [{
+                        label: selectedHospital,
+                        data: [hospital.emergencies, hospital.responseTime, hospital.staff],
+                        backgroundColor: ["#3498db", "#e74c3c", "#2ecc71"]
+                    }]
+                };
+
+                if (hospitalChart) {
+                    hospitalChart.data = data;
+                    hospitalChart.update();
+                } else {
+                    hospitalChart = new Chart(document.getElementById("hospitalChart"), {
+                        type: "bar",
+                        data: data,
+                        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                    });
+                }
+
+                const performanceData = {
+                    labels: ["Patients Treated", "Feedback Score", "Revenue Generated"],
+                    datasets: [{
+                        label: selectedHospital,
+                        data: [hospital.patients, hospital.feedbackScore, hospital.revenue],
+                        backgroundColor: ["#ffcc00", "#ff5733", "#33cc33"]
+                    }]
+                };
+
+                if (performanceChart) {
+                    performanceChart.data = performanceData;
+                    performanceChart.update();
+                } else {
+                    performanceChart = new Chart(document.getElementById("performanceChart"), {
+                        type: "bar",
+                        data: performanceData,
+                        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                    });
+                }
+
+                // Update text fields
+                document.getElementById('patientsTreated').textContent = `Patients Treated: ${hospital.patients}`;
+                document.getElementById('feedbackScore').textContent = `Feedback Score: ${hospital.feedbackScore}`;
+            }
+        }
+
+        function updateDynamicData() {
+            hospitals.forEach(hospital => {
+                hospital.emergencies = Math.floor(Math.random() * 300);
+                hospital.responseTime = (Math.random() * (12 - 5) + 5).toFixed(1);
+                hospital.staff = Math.floor(Math.random() * (150 - 100) + 100);
+                hospital.patients = Math.floor(Math.random() * 700);
+                hospital.feedbackScore = Math.floor(Math.random() * (100 - 60) + 60);
+                hospital.revenue = Math.floor(Math.random() * (1500000 - 500000) + 500000);
+            });
+            updateHospitalData();
+        }
+
+        setInterval(updateDynamicData, 2000);
+        document.addEventListener("DOMContentLoaded", loadHospitals);
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>

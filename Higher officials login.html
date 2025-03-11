@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1C1C1C;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-secondary {
+            background-color: #008C45;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .captcha {
+            font-weight: bold;
+            font-size: 20px;
+            color: #FF8C00;
+            background: #F0F0F0;
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo" class="logo">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <input type="tel" id="phone" placeholder="Phone Number" required>
+    <button class="btn" id="sendOtpButton">Send OTP</button>
+    <input type="text" id="otp" placeholder="Enter OTP" required>
+    <button class="btn-secondary" id="verifyOtpButton">Verify OTP</button>
+    <div class="captcha-container">
+        <span class="captcha" id="captcha"></span>
+        <button type="button" onclick="generateCaptcha()">↻</button>
+    </div>
+    <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" required>
+    <button class="btn" onclick="location.href='Higher Dashboard.html'" id="loginButton">Login</button>
+    <button class="btn-secondary" onclick="location.href='higher officials signin.html'">Sign Up</button>
+    <div class="links">
+        <a href="higher officials forgotpwd.html">Forgot Password?</a>
+    </div>
+</div>
+
+<script>
+    let generatedOTP;
+    let generatedCaptcha;
+
+    document.getElementById('sendOtpButton').addEventListener('click', () => {
+        generatedOTP = Math.floor(100000 + Math.random() * 900000);
+        alert('OTP sent to phone: ' + generatedOTP);
+    });
+
+    document.getElementById('loginButton').addEventListener('click', () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const otp = document.getElementById('otp').value;
+        const captchaInput = document.getElementById('captchaInput').value;
+
+        if (otp != generatedOTP) {
+            alert('Invalid OTP');
+            return;
+        }
+
+        if (captchaInput !== generatedCaptcha) {
+            alert('Invalid CAPTCHA');
+            return;
+        }
+
+        alert('Login successful!');
+        window.location.href = "Higher dashboard.html";
+    });
+
+    function generateCaptcha() {
+        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let captcha = '';
+        for (let i = 0; i < 6; i++) {
+            captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        generatedCaptcha = captcha;
+        document.getElementById('captcha').textContent = captcha;
+    }
+
+    window.onload = generateCaptcha;
+</script>
+
+</body>
+</html>

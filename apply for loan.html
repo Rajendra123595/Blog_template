@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Apply for Loan</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F8F8F8;
+    color: #444444;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px;
+}
+
+h2 {
+    color: #008C45;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    text-align: left;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+input[readonly] {
+    background-color: #eee;
+}
+
+.submit-btn {
+    background: #007BFF;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: #0056b3;
+}
+
+#success-message {
+    display: none;
+    background: #D4EDDA;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #C3E6CB;
+    margin-top: 15px;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Apply for Loan</h2>
+
+    <label>Name:</label>
+    <input type="text" id="user-name" value="John Doe" readonly>
+
+    <label>Bank Name:</label>
+    <select id="bank-name">
+        <option>State Bank of India (SBI)</option>
+        <option>HDFC Bank</option>
+        <option>ICICI Bank</option>
+        <option>Punjab National Bank (PNB)</option>
+        <option>Axis Bank</option>
+    </select>
+
+    <label>Bank Account Number:</label>
+    <input type="text" id="bank-acc" value="1234 5678 9012" readonly>
+
+    <label>Enter Loan Amount (₹):</label>
+    <input type="number" id="loan-amount" placeholder="Enter amount" min="1000" required>
+
+    <label>Reason for Loan:</label>
+    <input type="text" id="loan-reason" placeholder="E.g., Medical Emergency" required>
+
+    <button class="submit-btn" onclick="submitLoan()">Submit Loan Request</button>
+
+    <div id="success-message">✅ Loan Amount Credited to Your Bank Account! Redirecting to Payment...</div>
+</div>
+
+<script>
+function submitLoan() {
+    let amount = document.getElementById("loan-amount").value;
+    let reason = document.getElementById("loan-reason").value;
+    let bank = document.getElementById("bank-name").value;
+
+    if (amount && reason) {
+        // Show success message
+        document.getElementById("success-message").style.display = "block";
+
+        // Redirect to payment options page after 3 seconds
+        setTimeout(() => {
+            window.location.href = "pending bills.html";
+        }, 3000);
+    } else {
+        alert("Please fill in all the fields.");
+    }
+}
+</script>
+
+</body>
+</html>

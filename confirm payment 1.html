@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Payment PIN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        h2 {
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+        .pin-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pin-box {
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            outline: none;
+        }
+        .btn {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .btn.confirm {
+            background: #008C45;
+            color: white;
+        }
+        .btn.back {
+            background: #FF8C00;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+    <script>
+        function moveInput(next, prev, event) {
+            if (event.key === "Backspace" && prev) {
+                document.getElementById(prev).focus();
+            } else if (event.target.value.length === 1 && next) {
+                document.getElementById(next).focus();
+            }
+        }
+
+        function confirmPayment() {
+            let pin = "";
+            for (let i = 1; i <= 4; i++) {
+                pin += document.getElementById("pin" + i).value;
+            }
+
+            if (pin.length === 4) {
+                alert("Payment Successful ✅");
+                setTimeout(() => {
+                    window.location.href = "billing and payment status.html"; // Redirect to Quick Actions Page
+                }, 1500); // 1.5-second delay before redirect
+            } else {
+                alert("Please enter a 4-digit PIN");
+            }
+        }
+
+        function goBack() {
+            window.history.back(); // Go to previous page
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Hospital Logo" class="logo">
+        <h2>Enter Payment PIN</h2>
+
+        <div class="pin-input">
+            <input type="password" id="pin1" class="pin-box" maxlength="1" onkeyup="moveInput('pin2', '', event)">
+            <input type="password" id="pin2" class="pin-box" maxlength="1" onkeyup="moveInput('pin3', 'pin1', event)">
+            <input type="password" id="pin3" class="pin-box" maxlength="1" onkeyup="moveInput('pin4', 'pin2', event)">
+            <input type="password" id="pin4" class="pin-box" maxlength="1" onkeyup="moveInput('', 'pin3', event)">
+        </div>
+
+        <button class="btn confirm" onclick="confirmPayment()">Confirm Payment</button>
+        <button class="btn back" onclick="location.href='pending bills.html'">Back</button>
+    </div>
+
+</body>
+</html>

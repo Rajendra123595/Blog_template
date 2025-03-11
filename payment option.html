@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Payment Options</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F8F8F8;
+    color: #444444;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px;
+}
+
+h2 {
+    color: #008C45;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.pending-btn {
+    background: #007BFF;
+    color: white;
+}
+
+.pending-btn:hover {
+    background: #0056b3;
+}
+
+.medication-btn {
+    background: #28A745;
+    color: white;
+}
+
+.medication-btn:hover {
+    background: #1E7E34;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Select Payment Option</h2>
+    <button class="pending-btn" onclick="redirectToPendingPayment()">Pay Pending Bills</button>
+    <button class="medication-btn" onclick="redirectToMedicationPayment()">Pay Medication Charges</button>
+</div>
+
+<script>
+function redirectToPendingPayment() {
+    window.location.href = "pending bills.html";
+}
+
+function redirectToMedicationPayment() {
+    window.location.href = "medication charges.html";
+}
+</script>
+
+</body>
+</html>

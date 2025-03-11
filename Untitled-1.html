@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency & Alerts</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN6BNE9e3Htel1_TSCozwfQJNShZspbK4&callback=initMap" async defer></script>
+    <script>
+        let map;
+        let marker;
+        let alertSound = new Audio('emergency-alert-siren-253180.mp3');
+ // Emergency big horn sound
+        let alertInterval;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 0, lng: 0 },
+                zoom: 15,
+            });
+            marker = new google.maps.Marker({
+                position: { lat: 0, lng: 0 },
+                map: map,
+                title: "Patient Location",
+            });
+            getLocation();
+        }
+        
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition((position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.setCenter(userLocation);
+                    marker.setPosition(userLocation);
+                    document.getElementById("location-info").innerText = `Latitude: ${userLocation.lat}, Longitude: ${userLocation.lng}`;
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+        
+        function sendEmergencyAlert() {
+            alert("Emergency Alert Sent to Hospital!");
+            document.getElementById("patient-name").value = "John Doe";
+            document.getElementById("emergency-type").value = "Cardiac Arrest";
+            document.getElementById("severity-level").value = "Critical";
+            document.getElementById("emergency-log").innerHTML += "<li>New Emergency Alert Received!</li>";
+            startRingtone();
+            
+            fetch("https://hospital-api.com/emergency", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    patientName: "John Doe",
+                    emergencyType: "Cardiac Arrest",
+                    severityLevel: "Critical",
+                    patientLocation: document.getElementById("location-info").innerText,
+                    timestamp: new Date().toLocaleString()
+                })
+            });
+        }
+        
+        function dispatchAmbulance() {
+            alert("Ambulance Dispatched to Patient Location!");
+            stopRingtone();
+            fetch("https://ambulance-api.com/dispatch", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    patientLocation: document.getElementById("location-info").innerText,
+                    assignedAmbulance: "Ambulance #24"
+                })
+            });
+        }
+        
+        function startRingtone() {
+            alertSound.currentTime = 0; // Restart sound if already playing
+            alertSound.play().catch(error => {
+              console.log("Autoplay failed, requiring user interaction:", error);
+              alert("Click 'Enable Sound' first to allow playback.");
+            });
+
+            alertInterval = setInterval(() => {
+               alertSound.currentTime = 0;
+               alertSound.play();
+            }, Math.floor(Math.random() * (30000 - 10000) + 10000)); // Rings every 10-30 seconds
+        }
+
+
+        
+        function stopRingtone() {
+            clearInterval(alertInterval);
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+        #map {
+            width: 80%;
+            height: 400px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background: darkred;
+        }
+        #emergency-log {
+            width: 80%;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        #emergency-log ul {
+            list-style: none;
+            padding: 0;
+        }
+        #emergency-log li {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        input, select {
+            display: block;
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Emergency & Alerts</h2>
+    <button onclick="sendEmergencyAlert()">Send Emergency Alert</button>
+    <button onclick="dispatchAmbulance()">Dispatch Ambulance</button>
+    <p id="location-info">Fetching location...</p>
+    <div id="map"></div>
+    <label>Patient Name:</label>
+    <input type="text" id="patient-name" placeholder="Enter Patient Name" readonly>
+    
+    <label>Emergency Type:</label>
+    <select id="emergency-type" disabled>
+        <option value="Cardiac Arrest">Cardiac Arrest</option>
+        <option value="Accident">Accident</option>
+        <option value="Fire">Fire</option>
+    </select>
+    
+    <label>Severity Level:</label>
+    <select id="severity-level" disabled>
+        <option value="Critical">Critical</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+    </select>
+    <div id="emergency-log">
+        <h3>Emergency Log</h3>
+        <ul></ul>
+    </div>
+    <button onclick="alertSound.play()">Enable Sound</button>
+
+</body>
+</html>

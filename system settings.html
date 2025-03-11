@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin & System Settings</title>
+    <style>
+      body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            margin: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+
+/* Main Content */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.settings-section {
+    background: #ecf0f1;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    background: #3498db;
+    color: white;
+    border-radius: 5px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #bdc3c7;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #34495e;
+    color: white;
+}
+.main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+.header {
+             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        .main-content {
+  margin-left: 220px;
+    flex: 1;
+    padding: 20px;
+}
+
+    </style>
+    
+</head>
+<body>
+  <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='Higher Dashboard.html'">Dashboard Overview</li>
+            <li onclick="location.href='employee monitoring.html'">Employee Monitoring</li>
+            <li onclick="location.href='patient feedback.html'">Patient Feedback & Satisfaction</li>
+            <li onclick="location.href='hospital performance.html'">Hospital Performance</li>
+            <li onclick="location.href='emergency cases.html'">Emergency Cases</li>
+            <li onclick="location.href='finance.html'" >Finance</li>
+            <li onclick="location.href='reports & analytics.html'">Reports & Analytics</li>
+            <li class="active" onclick="location.href='system settings.html'">System Settings</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>System Settings</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+    
+        
+            <h2>⚙️ System Settings</h2>
+
+            <!-- User & Role Management -->
+            <section class="settings-section">
+                <h3>👥 User & Role Management</h3>
+                <button onclick="addUser()">Add New User</button>
+                <table id="userTable">
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        
+                    </tr>
+                    <tr>
+                        
+                        <td>Dr. John Doe</td>
+                        <td>Senior Doctor</td>
+                        <td>Active</td>
+                        <td><button>Edit</button> <button>Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>Nurse Jane Smith</td>
+                        <td>Nurse</td>
+                        <td>Inactive</td>
+                        <td><button>Edit</button> <button>Delete</button></td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Security & Permissions -->
+            <section class="settings-section">
+                <h3>🔒 Security & Permissions</h3>
+                <label>
+                    <input type="checkbox" checked> Enable Two-Factor Authentication (2FA)
+                </label>
+                <label>
+                    <input type="checkbox"> Allow Role-Based Access Control (RBAC)
+                </label>
+            </section>
+
+            <!-- Data Backup & Restore -->
+            <section class="settings-section">
+                <h3>💾 Data Backup & Restore</h3>
+                <button onclick="backupData()">Backup Now</button>
+                <button onclick="restoreData()">Restore Data</button>
+            </section>
+
+            <!-- Notifications & Alerts -->
+            <section class="settings-section">
+                <h3>📢 Notification Settings</h3>
+                <label>
+                    <input type="checkbox" checked> Enable Emergency Alerts
+                </label>
+                <label>
+                    <input type="checkbox" checked> Notify Admin on New Patient Feedback
+                </label>
+            </section>
+
+            <!-- Audit Logs -->
+            <section class="settings-section">
+                <h3>📜 System Audit Logs</h3>
+                <ul id="auditLogs"></ul>
+                <ul id="auditLogs">
+                    <li>Admin updated hospital settings - 10 mins ago</li>
+                    <li>New user added: Dr. Alice - 1 hour ago</li>
+                    <li>Backup completed successfully - Yesterday</li>
+                </ul>
+            </section>
+        
+    </div>
+    <script>
+      function addUser() {
+            let name = prompt("Enter user name:");
+            let role = prompt("Enter role:");
+            let status = prompt("Enter status (Active/Inactive):");
+            if (!name || !role || !status) return;
+            
+            let table = document.getElementById("userTable");
+            let row = table.insertRow(-1);
+            row.insertCell(0).innerText = name;
+            row.insertCell(1).innerText = role;
+            row.insertCell(2).innerText = status;
+            let actionsCell = row.insertCell(3);
+            
+            let editBtn = document.createElement("button");
+            editBtn.innerText = "Edit";
+            editBtn.onclick = function () { editUser(row); };
+            actionsCell.appendChild(editBtn);
+            
+            let deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "Delete";
+            deleteBtn.onclick = function () { deleteUser(row); };
+            actionsCell.appendChild(deleteBtn);
+            
+            logAction(`User added: ${name} (${role})`);
+        }
+
+        function editUser(row) {
+            let newName = prompt("Edit Name:", row.cells[0].innerText);
+            let newRole = prompt("Edit Role:", row.cells[1].innerText);
+            let newStatus = prompt("Edit Status:", row.cells[2].innerText);
+            if (!newName || !newRole || !newStatus) return;
+            
+            row.cells[0].innerText = newName;
+            row.cells[1].innerText = newRole;
+            row.cells[2].innerText = newStatus;
+            logAction(`User edited: ${newName} (${newRole})`);
+        }
+
+        function deleteUser(row) {
+            let name = row.cells[0].innerText;
+            row.remove();
+            logAction(`User deleted: ${name}`);
+        }
+
+        function logAction(action) {
+            let logs = document.getElementById("auditLogs");
+            let logEntry = document.createElement("li");
+            logEntry.textContent = action + " - Just now";
+            logs.prepend(logEntry);
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Reports & Lab Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F8F8F8;
+            color: #444444;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #FF8C00, #008C45);
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            color: white;
+        }
+        .sidebar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            border-bottom: 1px solid #F8F8F8;
+            cursor: pointer;
+        }
+        
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #007BFF;
+            color: white;
+        }
+        .content {
+            
+            padding: 20px;
+            width: 100%;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 8px;
+            width: 100%;
+        }
+        .report-list, .report-details {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .report-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .report-list ul li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .report-list ul li:hover {
+            background: #f1f1f1;
+        }
+        
+        .main-content {
+            margin-left: 200px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #566D7E;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header .logout {
+            background: #FF8C00;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .header .patient-id {
+            font-size: 14px;
+            color: #EE7EA0;
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="file:///C:/Users/desur/OneDrive/Pictures/swasthindia.jpg" alt="Swasth India Logo">
+        <ul>
+            <li onclick="location.href='employee dashboard.html'">Dashboard</li>
+            <li onclick="location.href='appointments.html'">Appointments</li>
+            <li onclick="location.href='patient management.html'">Patient Management</li>
+            <li class="active" onclick="location.href='employee medical reports.html'">Medical Reports</li>
+            <li onclick="location.href='internal messaging.html'">Internal Messaging</li>
+            <li onclick="location.href='employee billing and insurance.html'">Billing & Insurance</li>
+            <li onclick="location.href='employee settings.html'">Settings</li>
+            <li onclick="location.href='employee pharmacy and integration.html'">Prescriptions & Pharmacy</li>
+            <li onclick="location.href='emergency alerts.html'">Emergency Alerts</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h2>Medical Reports & Lab Results</h2>
+            <p class="patient-id">Employee ID: <span id="patient-id">N/A</span></p>
+            
+            <div>
+                <img src="https://thumbs.dreamstime.com/b/icon-profile-color-green-icon-profile-color-green-circle-color-dark-green-background-color-white-194702090.jpg" alt="Profile">
+                <button class="logout" onclick="location.href='3personslogin.html'">Logout</button>
+            </div>
+        </div>
+        <div class="content">
+           <h2>Medical Reports & Lab Results</h2>
+           <div class="search-bar">
+               <input type="text" id="search" placeholder="Search Reports" onkeyup="filterReports()">
+           </div>
+           <div class="report-list">
+               <h3>Report List</h3>
+               <ul id="reportList">
+                   <li onclick="showReportDetails('John Doe', 30, 'Blood Test', 'XYZ Diagnostics', '02/10/2025', 'Normal', 'Hemoglobin: 13.5 g/dL, WBC: 6000/mcL', 'No abnormalities detected')">R001 - John Doe (Blood Test)</li>
+                   <li onclick="showReportDetails('Jane Smith', 45, 'MRI Scan', 'ABC Labs', '01/15/2025', 'Critical', 'Brain lesion detected', 'Further tests recommended')">R002 - Jane Smith (MRI Scan)</li>
+                   <li onclick="showReportDetails('Mark Lee', 50, 'X-Ray', 'MediScan Center', '03/05/2025', 'Normal', 'No fractures detected', 'Routine checkup advised')">R003 - Mark Lee (X-Ray)</li>
+                   <li onclick="showReportDetails('Alice Brown', 35, 'Urine Test', 'XYZ Diagnostics', '02/20/2025', 'Normal', 'No infections detected', 'Maintain hydration')">R004 - Alice Brown (Urine Test)</li>
+                   <li onclick="showReportDetails('Kevin White', 28, 'ECG', 'Heart Care Center', '02/18/2025', 'Borderline', 'Minor arrhythmia noted', 'Regular monitoring required')">R005 - Kevin White (ECG)</li>
+               </ul>
+           </div>
+        <div class="report-details">
+            <h3>Report Details</h3>
+            <p><strong>Patient:</strong> <span id="rName">-</span></p>
+            <p><strong>Age:</strong> <span id="rAge">-</span></p>
+            <p><strong>Test Type:</strong> <span id="rTestType">-</span></p>
+            <p><strong>Lab Name:</strong> <span id="rLabName">-</span></p>
+            <p><strong>Date Issued:</strong> <span id="rDateIssued">-</span></p>
+            <p><strong>Status:</strong> <span id="rStatus">-</span></p>
+            <p><strong>Results:</strong> <span id="rResults">-</span></p>
+            <p><strong>Doctor Notes:</strong> <span id="rNotes">-</span></p>
+        </div>
+    </div>
+    <script>
+        function showReportDetails(name, age, testType, labName, dateIssued, status, results, notes) {
+            document.getElementById("rName").innerText = name;
+            document.getElementById("rAge").innerText = age;
+            document.getElementById("rTestType").innerText = testType;
+            document.getElementById("rLabName").innerText = labName;
+            document.getElementById("rDateIssued").innerText = dateIssued;
+            document.getElementById("rStatus").innerText = status;
+            document.getElementById("rResults").innerText = results;
+            document.getElementById("rNotes").innerText = notes;
+        }
+
+        function filterReports() {
+            let search = document.getElementById("search").value.toLowerCase();
+            let reports = document.querySelectorAll(".report-list ul li");
+            
+            reports.forEach(report => {
+                let text = report.innerText.toLowerCase();
+                report.style.display = text.includes(search) ? "block" : "none";
+            });
+        }
+        let username = "patient123";
+            let password = "securepass";
+            let patientId = btoa(username + password).slice(0, 8);
+            document.getElementById("patient-id").textContent = patientId;
+    </script>
+</body>
+</html>
